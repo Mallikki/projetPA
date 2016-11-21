@@ -1,16 +1,19 @@
 header {
-    margin:0;
-    width:75%; 
-    height:120px;
+    width:100%;   
 }
+
+.imgheader
+{
+    width:100%;
+    height:auto;
+}
+
+
 #main {
-    margin-left: 1em;
-    padding-left:1em;
+
 }
 
 nav {
-    margin-left: 1em;
-    margin-top: 1.5em;
 }
 
 .nopuce {

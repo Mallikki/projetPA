@@ -18,8 +18,8 @@ session_start();
     </head>
     <body>
          <header>
+              <img class="imgheader" src="admin/images/bannière.jpg" alt="Cinéma L'objectif" title="Cinéma l'Objectif"/>
              <div class="container">
-                <img src="admin/images/bannière.jpg" alt="Cinéma L'objectif" title="Cinéma l'Objectif"/>
              </div>
         </header>
         <?php
