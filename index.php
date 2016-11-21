@@ -14,13 +14,13 @@ session_start();
         <script src="admin/lib/css/bootstrap-3.3.7/dist/js/bootstrap.js"></script>
         <script src="admin/lib/js/functionsBtJquery.js"></script>
         <meta charset='UTF-8'/>
+        <link rel="icon" href="admin/images/favicon.ico" />
     </head>
     <body>
          <header>
-            <div class="container">
-                <link rel="icon" href="./images/favicon.ico" />
-                <img src="admin/images/banniere.jpg" alt="Cinéma L'objectif" title="Cinéma l'Objectif"/>
-            </div>
+             <div class="container">
+                <img src="admin/images/bannière.jpg" alt="Cinéma L'objectif" title="Cinéma l'Objectif"/>
+             </div>
         </header>
         <?php
         // put your code here
