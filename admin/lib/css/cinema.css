@@ -1,0 +1,182 @@
+/* style cinema.css */
+#intro2
+{
+    text-align: center;
+     border: solid black 2px;
+     
+}
+
+.icone
+{
+    width:20%;
+}
+
+div#list_de_trucs{
+    
+margin:10px auto;
+width:100%;
+
+}
+div#list_de_trucs table{
+margin:0px;
+width:100%;
+}
+
+.titre_tableau_recap
+{
+	border: 2px solid black;
+	background-color: #B4E9F7;
+	text-align: center;
+	border-radius:5px;
+        font-size:140%;
+        font-family: Arial Narrow, sans-serif;
+        
+}
+
+.liste_tableau_recap
+{
+	border:2px solid black;
+	border-radius: 5px;
+	background-color: white;
+	text-align: center;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-align: center;
+	border-radius: 3px;
+}
+
+
+.intro
+{
+    font-size: 120%;
+}
+
+/**************************Carousel accueil ***************************/
+.carousel{
+    background: #2f4357;
+    width:100%;
+    height:100%;
+}
+.item img{
+    margin: 0 auto; /* Align slide image horizontally center */
+    width: 75%;
+}
+.bs-example{
+    margin: 10px;
+}
+
+/******************************* Gabarit *********************************/
+
+.container2
+{
+    border:solid black 2px;
+    padding:5px;
+}
+
+.titreInfo
+{
+    text-align: center;
+       text-decoration: underline;
+}
+.sstitre
+{
+    color:#184464;
+ 
+}
+
+.devanture{
+    width: 60%;
+    margin-top:10px;
+    border-radius:10px 0;
+    position:absolute;
+}
+
+body {
+   background-image: url('./admin/images/fong.jpg');
+   margin:0;
+	width: 100%;
+	background-repeat:repeat;
+}
+header {
+    width:102%;
+    margin:auto 0;
+    padding:1.2em;    
+}
+
+#main {
+    margin-left: 1em;
+    padding-left:1em;
+}
+
+nav {
+    margin-left: 1em;
+    margin-top: 1.5em;
+}
+
+.nopuce {
+    list-style-type:none;
+}
+
+nav a{
+    color:#900;
+    font-size:120%;
+    text-decoration:none;
+}
+
+nav a:hover {
+    color:#009;
+    text-decoration:underline;
+}
+
+img{
+    width:100%;
+}
+
+footer {
+    clear:both; 
+    color:#333;
+    width:80%;
+    margin:0 auto; 
+    text-align:center;
+    padding-right:15px;
+    padding-top:1%;
+    font-weight: bold;
+}	
+
+.banner
+{
+    width:100%;
+    height: 150px;
+    border:solid black 2px;
+     opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+#itemMenu
+{
+    color:#184464;
+    margin-left: 50px;
+    margin-right:50px;
+}
+
+
+
+.titre{
+    position:absolute;
+    font-family: Arial Narrow, sans-serif;
+    text-shadow: 2px 2px 4px #999;
+    font-weight: bold;
+    font-size: 400%;
+    top: 6%;
+}
+
+#menu
+{
+    border: solid black 2px;
+}
+
+#itemMenu:hover
+{
+    background-color: #B4E9F7;
+}
+
