@@ -90,9 +90,11 @@ width:100%;
     border-radius:10px 0;
     position:absolute;
 }
+html{
+       background-image: url('./admin/images/fong.jpg');
 
+}
 body {
-   background-image: url('./admin/images/fong.jpg');
    margin:0;
 	width: 100%;
 	background-repeat:repeat;
