@@ -17,7 +17,7 @@ session_start();
         <meta charset='UTF-8'/>
     </head>
 
-    <body >
+    <body>
         <header >
             <div class="container">
                 <div class="col-sm-12">
@@ -47,12 +47,11 @@ session_start();
                 {
                 $cli=new ClientDB($cnx);
                 $pseudo=$cli->read($_SESSION['client']);
-                print " Bienvenue, <a href=\"./index.php?page=gestionCompte\">" .$pseudo[0]->pseudo. "</a>";
+                print "<span class=\"blanc\">Bienvenue, </span><a href=\"./index.php?page=gestionCompte\">" .$pseudo[0]->pseudo. "</a>";
                 }
             ?>
             </div>
         </div>
-    <brP>
         <div class="container">
             <div class="col-sm-12">
             
@@ -82,17 +81,18 @@ session_start();
                     </section>
                 </div>
             </div>
-
+        </div>
+                <div class="container">
+            <div class="row">
             <footer class="footer">
                 <?php
-                if (file_exists('./admin/lib/php/footer.php')) {
-                    include ('./admin/lib/php/footer.php');
+                if (file_exists('./lib/php/footer.php')) {
+                    include ('./lib/php/footer.php');
                 } 
                 ?>  
             </footer>
+            </div>
         </div>
-    </div>
-
 
     </body>
 </html>

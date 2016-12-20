@@ -1,9 +1,9 @@
 <?php
 if(isset($_POST['submit_login'])){
     $log = new ClientDB($cnx);
-    $retour = $log->isAuthorized($_POST['nom'], $_POST['mdp']);
+    $retour = $log->isAuthorizedAdmin($_POST['nom'], $_POST['mdp']);
     if(!$retour==0){
-        $_SESSION['client']=$retour;
+        $_SESSION['admin']=$retour;
 		?>
 		<div class="col-md-12">
 			<div class="alert alert-dismissable alert-success">
@@ -37,6 +37,8 @@ if(isset($_POST['submit_login'])){
     }    
 }
 
+ else {
+    
 ?>
 
 <section id="message"><?php if (isset($message)) //print $message; ?></section>
@@ -79,3 +81,4 @@ if(isset($_POST['submit_login'])){
 		</div>
 	</div>
 </div>
+ <?php } ?>

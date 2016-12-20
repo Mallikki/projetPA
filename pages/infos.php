@@ -1,61 +1,60 @@
 <?php
 $info = new PrixDB($cnx);
 ?>
-        <div class="container2">
-            <div class="row">
-                <div class="col-sm-12">
-                 <h1 class="titreInfo">Infos pratiques</h1>
-                </div>
-                
-            </div>
-            <div class="row">
-            <div class="col-sm-9">
-                
-               
-                <h3 class="sstitre">Localisation</h3>
-                <br/>Notre cinéma se trouve à deux pas du parc du Cinquantenaire!<br/><br/>
-		Pour nous rejoindre en métro à partir de la gare centrale, prenez la ligne 1, direction Stockel et descendez à l'arrêt Mongtomery.
-            </div>
-                    <div class="col-sm-3">
-                 <img class="img-responsive center-block devanture" src="./admin/images/devanture.jpg" alt="Devanture" />
-                    </div> 
-                </div>
-            <div class="row">
-            <div class="col-sm-12">
-                <br/>
-                <h3 class="sstitre">Adresse</h3>
+<div class="container-fluid bord">
+	<div class="row ">
+		<div class="col-md-4">
+			<h2 class="centre">
+				Localisation
+			</h2>
+			<p class="centre">
+                            Notre cinéma se trouve à deux pas du parc du Cinquantenaire!<br/><br/>
+                            Pour nous rejoindre en métro à partir de la gare centrale, prenez la ligne 1, direction Stockel et descendez à l'arrêt Mongtomery.
+			</p>
+		</div>
+		<div class="col-md-4">
+			<h2 class="centre">
+				Adresse
+			</h2>
+			<p class="centre">
+                            Adresse</h3>
                 Rue du projecteur 8 <br/><br/>1000 Bruxelles
-                
-            </div>
-            </div>
-            <div class="row">
-            <div class="col-sm-12">
-                <br/>
-                <h3 class="sstitre">Tarifs</h3>
-                Enfant: <?php $info->getPrixEnfant()?> €<br/>
-                Adulte: 
-                <?php $info->getPrixAdulte() ?> €<br/>
-                Etudiant:
-                <?php $info->getPrixEtudiant() ?> €<br/>
-            </div>
-            </div>
-             <div class="row">
-            <div class="col-sm-12">
-                <br/>
-                <h3 class="sstitre">Heures d'ouverture</h3>
-                De 11h30 à  20h30 
-                
-            </div>
-            </div>
-             <div class="row">
-            <div class="col-sm-12">
-               <br/> 
-                <h3 class="sstitre">Contact</h3>
-               +32 441/23.62.38<br/><br/>
+			</p>
+		</div>
+		<div class="col-md-4">
+			<h2 class="centre">
+				Tarifs
+			</h2>
+			<p class="centre">
+                            Enfant: <?php $info->getPrixEnfant()?> €<br/>
+                            Adulte: 
+                            <?php $info->getPrixAdulte() ?> €<br/>
+                            Etudiant:
+                            <?php $info->getPrixEtudiant() ?> €<br/>
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+		</div>
+		<div class="col-md-3">
+			<h2 class="centre">
+				Heures d'ouverture
+			</h2>
+			<p class="centre">
+                            De 11h30 à  20h30 
+			</p>
+		</div>
+		<div class="col-md-3">
+			<h2 class="centre">
+				Contact
+			</h2>
+			<p class="centre">
+                            +32 441/23.62.38<br/><br/>
                Une question? Une suggestion? Envoyez nous un mail <a href="mailto:lobjectif@gmail.com">ici !
-                
-            </div>
-            </div>
-            
-        </div>
-
+			</p>
+		</div>
+		<div class="col-md-3">
+		</div>
+	</div>
+</div>

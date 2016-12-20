@@ -6,19 +6,16 @@
 			<div class="tabbable" id="tabs-91809">
 				<ul class="nav nav-tabs">
 					<li class="active">
-                                            <a href="./index.php?page=accueil">L'Objectif</a>
+                                            <a href="./index.php?page=accueil">Accueil</a>
 					</li>
 					<li>
-						<a href="./index.php?page=programme">Programme</a>
+						<a href="#">Séances</a>
 					</li>
                                         <li>
-						<a href="./index.php?page=gestionCompte">Mon Compte</a>
+						<a href="#">Client</a>
 					</li>
                                         <li>
-						<a href="./index.php?page=MesReservations">Mes réservations</a>
-					</li>
-                                        <li>
-						<a href="./index.php?page=infos">infos Pratiques</a>
+						<a href="#">Réservation</a>
 					</li>
                                         <li>
 						<a href="./pages/deconnexion.php">Déconnexion</a>

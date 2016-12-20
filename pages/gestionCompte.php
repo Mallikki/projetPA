@@ -1,5 +1,6 @@
 <?php  
-if(isset($_POST['modifier'])||isset($_POST['maj'])){ 
+if(isset($_POST['modifier'])||isset($_POST['maj']))
+{ 
     $cli=new ClientDB($cnx);
     $client=$cli->read($_SESSION['client']);
     if (isset($_POST['maj'])){
@@ -9,46 +10,92 @@ if(isset($_POST['modifier'])||isset($_POST['maj'])){
         //function create($nom, $prenom,$pseudo,$email,$mdp)
         $retour = $log->maj($_POST['nom'], $_POST['prenom'], $_POST['pseudo'], $_POST['email'],$_SESSION['client']);
         if($retour!=0){
-                    echo "Votre compte a bien été mis à jour!";?>
+                    ?>
+                    <div class="col-md-12">
+			<div class="alert alert-dismissable alert-success">
+				 
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+					×
+				</button>
+				<h4>
+				 Bravo!
+				</h4>Vos données ont été modifiées! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
+			</div>
+		</div>
                     <?php
         }
         else {
-            $message = "Données incorrectes";
-            echo $message;
+            ?>
+                <div class="row">
+		<div class="col-md-12">
+			<div class="alter alert-dismissable alert-danger">
+				 
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+					×
+				</button>
+				<h4>
+					Oups!
+				</h4> Une erreur est survenue
+			</div>
+		</div>
+	</div>
+                <?php
         } 
     }
-    else
+    else if (!isset($_POST['maj']))
     {       
     ?>
-    <div class="container" id="inline">
-    <form action="" method='post' id="">    
-        <div class="row">
-            <div class="log-sm-12"><h1 class="titreInfo">Mise à jour</h1><br/><br/></div>
-        </div>
-        <div class="row">
-            <div class="col-sm-2">Nom : </div>
-            <div class="col-sm-4"><input type="text" id="nom_" name="nom" value="<?php echo $client[0]->nom?>" /></div><br/><br/>
-        </div>
-        <div class="row">
-            <div class="col-sm-2">Prenom : </div>
-            <div class="col-sm-4"><input type="text" id="orenom_" name="prenom" value="<?php echo $client[0]->prenom ?>" /></div><br/><br/>
-        </div>
-        <div class="row">
-            <div class="col-sm-2">Pseudo : </div>
-            <div class="col-sm-4"><input type="text" id="pseudo_" name="pseudo" value="<?php echo $client[0]->pseudo ?>"/></div><br/><br/>
-        </div>
-        <div class="row">
-            <div class="col-sm-2">Email : </div>
-            <div class="col-sm-4"><input type="email" id="mail_" name="email" value="<?php echo $client[0]->email?>"/></div><br/><br/>
-        </div>
-        <div class="row">
-            <div class="col-sm-4"><br/>
-                <input type="submit" name="maj" id="maj" value="Mettre à jour" />&nbsp;&nbsp;&nbsp;
-                <input type="reset" id="annuler" value="Réinitialiser" />
-            </div>
-        </div>       
-        
-    </form>
+        <div class="container-fluid">
+	<div class="row ">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-4">
+				</div>
+				<div class="col-md-4 bord">
+					<h3>
+						Inscription
+					</h3>
+					<form action="" method='post' id="">
+						<div class="form-group">
+							 
+							<label>
+								Nom
+							</label>
+							<input type="text" id="nom_" name="nom" class="form-control" value="<?php echo $client[0]->nom?>" />
+						</div>
+						<div class="form-group">
+							 
+							<label>
+								Prenom
+							</label>
+							<input ttype="text" id="orenom_" name="prenom" class="form-control" value="<?php echo $client[0]->prenom?>" />
+						</div>
+                                                <div class="form-group">
+							 
+							<label>
+								Pseudo
+							</label>
+							<input type="text" id="pseudo_" name="pseudo" class="form-control" value="<?php echo $client[0]->pseudo?>"/>
+						</div>
+                                                <div class="form-group">
+							 
+							<label>
+								Email
+							</label>
+							<input type="email" id="mail_" name="email" class="form-control" value="<?php echo $client[0]->email?>" />
+						</div>
+						<button type="submit" name="maj" id="maj" value="Mettre à jour" value="Mettre à jour">
+							Mettre à jour
+						</button> 
+					</form>
+                                    <br/>
+				</div>
+				<div class="col-md-4">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
         
         <?php
     }
@@ -59,7 +106,6 @@ else if (isset($_POST['supprimer']))
         //function create($nom, $prenom,$pseudo,$email,$mdp)
         $retour = $log->delete($_SESSION['client']);
         if($retour==1){
-                    echo "Votre compte a bien été supprimé!";
                     print "<meta http-equiv=\"refresh\": Content=\"0;URL=./pages/deconnexion.php\">";
         }
         else {
@@ -69,50 +115,68 @@ else if (isset($_POST['supprimer']))
         } 
     }
 else {
-    $cli=new ClientDB($cnx);
-$client=$cli->read($_SESSION['client']);
-?>
-<div class="container2">
-            <div class="row">
-                <div class="col-sm-12">
-                 <h1 class="titreInfo">Gestion de votre compte</h1>
+            $cli=new ClientDB($cnx);
+        $client=$cli->read($_SESSION['client']);
+        ?>
+        <div class="container-fluid ">
+                <div class="row ">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-4 bord">
+                                <h3>
+                                        Vos informations
+                                </h3>
+                            
+                            <dl>
+						<dt>
+							Nom
+						</dt>
+						<dd>
+							<?php echo $client[0]->nom?>
+						</dd>
+						<dt>
+							Prénom
+						</dt>
+						<dd>
+							<?php echo $client[0]->prenom?>
+						</dd>
+					
+						<dt>
+							Pseudo
+						</dt>
+						<dd>
+							<?php echo $client[0]->pseudo?>
+						</dd>
+						<dt>
+							Email
+						</dt>
+						<dd>
+							<?php echo $client[0]->email?>
+						</dd>
+					</dl>
+                        </div>
+                        <div class="col-md-4">
+                        </div>
                 </div>
-                
-            </div>
-            <div class="row">
-            <div class="col-sm-12">
-                <h3 class="sstitre">Informations de votre compte</h3>
-                <table class="table-responsive col-sm-6 col-lg-6">
-                    <tr>
-                        <td>Nom</td>
-                        <td><?php echo $client[0]->nom?></td>
-                    </tr>
-                    <tr>
-                        <td>Prenom</td>
-                        <td><?php echo $client[0]->prenom?></td>
-                    </tr>
-                    <tr>
-                        <td>Pseudo</td>
-                        <td><?php echo $client[0]->pseudo?></td>
-                    </tr>
-                    <tr>
-                        <td>Adresse Email</td>
-                        <td><?php echo $client[0]->email?></td>
-                    </tr>
-                </table>
-            </div>
-  
-            </div>
-    <div class="row">
-            <div class="col-sm-8"><br/>
-           <form id="modifier" name="modifier" method="post"> 
-                <input type="submit" name="modifier" value="Modifier mes informations" />&nbsp;&nbsp;&nbsp;
-            </form>
-                <form id="supprimer" name="supprimer" method="post">
-                <input type="submit" name="supprimer" value="Supprimer mon compte" />
-                </form>
-            </div>
-        </div> 
-    </div>
-<?php
-}
+                <div class="row">
+				<div class="col-md-4">
+				</div>
+				<div class="col-md-2">
+                                    <form id="modifier" name="modifier" method="post">
+                                                        <button  type="submit" name="modifier" id="modifier" value="Modifier mes informations" class="btn btn-primary"">
+                                                                Modifier mes infos
+                                                        </button>
+                                                            </form>
+				</div>
+				<div class="col-md-2">
+                                    <form id="supprimer" name="supprimer" method="post">
+                                                         <button type="submit" name="supprimer" id="supprimer" value="Supprimer mon compte" class="btn btn-warning">
+                                                                Supprimer mon compte
+                                                        </button>
+                                                            </form>
+				</div>
+				<div class="col-md-4">
+				</div>
+			</div>
+        </div>
+        <?php } ?>

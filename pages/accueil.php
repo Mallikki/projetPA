@@ -1,52 +1,68 @@
 <?php
 ?>
-<div class="row">
-    <div class="col-sm-3"></div>
-    <div class="col-sm-6">
-        <div id="gt_carousel" class="carousel slide" data-ride="carousel">
-            <!-- Carousel indicators : qui indiquent l'image affichée -->
-            <ol class="carousel-indicators">
-                <li data-target="#gt_carousel" data-slide-to="0" class="active"></li>
-                <li data-target="#gt_carousel" data-slide-to="1"></li>
-                <li data-target="#gt_carousel" data-slide-to="2"></li>
-                <li data-target="#gt_carousel" data-slide-to="3"></li>
-                <li data-target="#gt_carousel" data-slide-to="4"></li>
-            </ol>   
-            <!-- Wrapper for carousel items -->
-            <div class="carousel-inner">
-                <div class="item active">
-                <img src="./admin/images/affiches/shaun.jpg" alt="First slide">
-              </div>
-              <div class="item">
-                <img src="./admin/images/affiches/2001espacejpg.jpg" alt="Second slide">
-              </div>
-              <div class="item">
-                <img src="./admin/images/affiches/Gone-Girl.jpg" alt="Third slide">
-              </div>
-			  <div class="item">
-                <img src="./admin/images/affiches/american-beauty.jpg" alt="Fourth slide">
-              </div>
-            </div>
-            <!-- Carousel controls -->
-
-            <a class="carousel-control left" href="#gt_carousel" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-            </a>
-            <a class="carousel-control right" href="#gt_carousel" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
-        </div>
-    </div>
-    <div class="col-sm-3"></div>
-    <div class="row">
-        <div id="intro2" class="col-sm-12"><br/>
-                <?php
-                    if (file_exists('./admin/lib/php/introAccueil.php')) {
-                        include ('./admin/lib/php/introAccueil.php');
-                    } 
-                    ?>
-            </p> 
-        </div>
-    </div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-3">
+		</div>
+		<div class="col-md-6">
+			<div class="carousel slide" id="carousel-176846">
+				<ol class="carousel-indicators">
+					<li class="active" data-slide-to="0" data-target="#carousel-176846">
+					</li>
+					<li data-slide-to="1" data-target="#carousel-176846">
+					</li>
+					<li data-slide-to="2" data-target="#carousel-176846">
+					</li>
+                                        <li data-slide-to="3" data-target="#carousel-176846">
+					</li>
+				</ol>
+				<div class="carousel-inner">
+					<div class="item active">
+						<img alt="Carousel Bootstrap First" src="./admin/images/affiches/shaun.jpg" />
+						<div class="carousel-caption">
+							<h4 class="textIntro">
+								Objectivité, telle est notre mission!
+							</h4>
+							<p class="textIntro">
+                                                                Nous avons l'espoir d'en faire effectivement preuve en vous montrant des 
+                                                                films considérés maintenant comme des chefs-d'oeuvre du 7e Art.
+							</p>
+						</div>
+					</div>
+					<div class="item">
+						<img alt="Carousel Bootstrap Second" src="./admin/images/affiches/2001espacejpg.jpg" />
+						<div class="carousel-caption">
+							<p class="textIntro">
+							C'est ainsi que pour vous, chers spectateurs, nous avons arpenté le web et les bibliothèques 
+                                                        à la recherche des films qui vous ont le plus marqués, et avons l'honneur aujourd'hui de les 
+                                                        rediffuser pour votre plus grand plaisir.
+							</p>
+						</div>
+					</div>
+					<div class="item">
+						<img alt="Carousel Bootstrap Third" src="./admin/images/affiches/Gone-Girl.jpg" />
+						<div class="carousel-caption">
+							<p class="textIntro">
+                                                            Venez vous joindre à nous pour des séances pleines de frissons à des prix dérisoires!
+							</p>
+						</div>
+					</div>
+                                        <div class="item">
+						<img alt="Carousel Bootstrap Fourth" src="./admin/images/affiches/american-beauty.jpg"  />
+						<div class="carousel-caption">
+							<p class="textIntro">
+                                                            Connectez-vous ou inscrivez-vous à notre site pour réserver vos places.
+							</p>
+						</div>
+					</div>
+				</div> <a class="left carousel-control" href="#carousel-176846" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-176846" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+			</div>
+			<h3 class="text-center">
+                            <a href="./index.php?page=programme">Découvrez notre Programme</a>
+			</h3>
+		</div>
+		<div class="col-md-3">
+		</div>
+	</div>
 </div>
 
