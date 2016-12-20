@@ -98,6 +98,8 @@ class ClientDB extends Client {
         
     }
     
+  
+    
     function delete($id)
     {
        try {
@@ -113,6 +115,23 @@ class ClientDB extends Client {
     return $retour;
         
     }
+      function RechCli($pseudo,$mdp)
+    {
+       try{
+            $retourupdate=array();
+            $query="select rechCli (:pseudo,:mdp) as retour";
+             $sql = $this->_db->prepare($query);
+            $sql->bindValue(':pseudo',$pseudo);
+             $sql->bindValue(':mdp',md5($mdp));
+            $sql->execute();
+            $retourupdate = $sql->fetchColumn(0);
+        } catch (PDOException $ex) {
+            print $ex->getMessage();
+        }
+        return $retourupdate;
+        
+    }
+    
     
 }
 

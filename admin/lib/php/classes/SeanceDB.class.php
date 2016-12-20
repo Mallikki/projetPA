@@ -29,6 +29,29 @@ class SeanceDB extends Seance{
         return $_typeArray;
     }
     
+    public function Read($id) {
+        try {
+            $query = "SELECT * FROM SEANCE where id_seance=:id";
+            $resultset = $this->_db->prepare($query);
+            $resultset->bindValue(1, $id);
+            $resultset->execute();
+            $data = $resultset->fetchAll();
+
+            $resultset->execute();
+        } catch (PDOException $e) {
+            print $e->getMessage();
+        }
+
+        while ($data = $resultset->fetch()) {
+            try {
+                $_typeArray[] = new Seance($data);
+            } catch (PDOException $e) {
+                print $e->getMessage();
+            }
+        }
+        return $_typeArray;
+    }
+    
     public function getDate($id) {
         try {
             $query = "SELECT dat FROM SEANCE where id_seance=:id";

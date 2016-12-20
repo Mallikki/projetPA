@@ -1,25 +1,29 @@
 <?php
 if(isset($_POST['submit_create'])){
     $log = new ClientDB($cnx);
-    //function create($nom, $prenom,$pseudo,$email,$mdp)
-    $retour = $log->create($_POST['nom'], $_POST['prenom'], $_POST['pseudo'], $_POST['email'], $_POST['mdp']);
-    if($retour!=0){
-        $_SESSION['client']=$retour;
-                ?>
-		<div class="col-md-12">
-			<div class="alert alert-dismissable alert-success">
-				 
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-					×
-				</button>
-				<h4>
-				 Bravo!
-				</h4>Votre compte a bien été créé! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
-			</div>
-		</div>
-		<?php
-    }
-    else {
+    
+    $retour=$log->RechCli($_POST['pseudo'],  $_POST['mdp']);
+    if ($retour==0)
+    {
+        
+        $retour2 = $log->create($_POST['nom'], $_POST['prenom'], $_POST['pseudo'], $_POST['email'], $_POST['mdp']);
+        if($retour2!=0){
+            $_SESSION['client']=$retour;
+                    ?>
+                    <div class="col-md-12">
+                            <div class="alert alert-dismissable alert-success">
+
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                            ×
+                                    </button>
+                                    <h4>
+                                     Bravo!
+                                    </h4>Votre compte a bien été créé! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
+                            </div>
+                    </div>
+                    <?php
+        }
+        else {
         ?>
 		<div class="col-md-12">
 			<div class="alert alert-dismissable alert-danger">
@@ -33,14 +37,29 @@ if(isset($_POST['submit_create'])){
 			</div>
 		</div>
                 <?php
-    }    
+        }  
+    }
+    else
+    {
+        ?>
+		<div class="col-md-12">
+			<div class="alert alert-dismissable alert-danger">
+				 
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+					×
+				</button>
+				<h4>
+					Attention
+				</h4> Un compte possédant ce pseudo et ce mot de passe a déjà été créé! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
+			</div>
+		</div>
+                <?php
+    }
 }
 else
 {  
 
 ?>
-<section id="message">
-    <?php if (isset($message)) {print $message;} ?></section>
 <div class="container-fluid">
 	<div class="row ">
 		<div class="col-md-12">

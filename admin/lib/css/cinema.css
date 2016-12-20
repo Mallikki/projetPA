@@ -55,7 +55,7 @@ width:100%;
 .carousel{
     background: #000000;
     width:100%;
-
+    height: 100%;
 }
 .item img{
     margin: 0 auto; /* Align slide image horizontally center */
@@ -122,6 +122,57 @@ width:100%;
     margin-top:10px;
     border-radius:10px 0;
     position:absolute;
+}
+
+#tooltip {
+    position:absolute;
+    z-index:9999;
+   background-color: red;
+    color:#fff;
+    font-size:13px;
+    font-weight: bold;
+    width:180px;   
+}
+ 
+#tooltip .tipHeader {
+    height:8px;
+    background-color: red;
+}
+ 
+#tooltip .tipBody {
+    background-color: red;
+    padding:5px 5px 5px 15px;
+}
+ 
+#tooltip .tipFooter {
+    height:8px;
+    background-color: red;
+}
+
+
+#tooltip2 {
+    position:absolute;
+    z-index:9999;
+    background-color: lightblue;
+    color:#fff;
+    font-size:13px;
+    font-weight: bold;
+    width:180px;   
+}
+ 
+#tooltip2 .tipHeader {
+    height:8px;
+   background-color: lightblue;
+}
+ 
+#tooltip2 .tipBody {
+    background-color: lightblue;
+    padding:5px 5px 5px 15px;
+}
+ 
+#tooltip2 .tipFooter {
+    height:8px;
+    background-color: lightblue;
 }
 
 .creme

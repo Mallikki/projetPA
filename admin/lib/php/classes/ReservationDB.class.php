@@ -100,6 +100,43 @@ class ReservationDB extends Reservation{
         }
     }
     
+      function create($adulte,$enfant,$etudiant,$seance,$client)
+    {
+       try{
+            $retourupdate=array();
+            $query="select creaRes (:adulte,:enfant,:etudiant,:seance,:client) as retour";
+             $sql = $this->_db->prepare($query);
+            $sql->bindValue(':adulte',$adulte);
+            $sql->bindValue(':enfant',$enfant);
+            $sql->bindValue(':etudiant',$etudiant);
+            $sql->bindValue(':seance',$seance);
+             $sql->bindValue(':client',$client);
+            $sql->execute();
+            $retourupdate = $sql->fetchColumn(0);
+        } catch (PDOException $ex) {
+            print $ex->getMessage();
+        }
+        return $retourupdate;
+        
+    }
+    
+     function RechRes($seance,$client)
+    {
+       try{
+            $retourupdate=array();
+            $query="select rechSiRes (:seance,:client) as retour";
+             $sql = $this->_db->prepare($query);
+            $sql->bindValue(':seance',$seance);
+             $sql->bindValue(':client',$client);
+            $sql->execute();
+            $retourupdate = $sql->fetchColumn(0);
+        } catch (PDOException $ex) {
+            print $ex->getMessage();
+        }
+        return $retourupdate;
+        
+    }
+    
       function transform($string) //fonction d'affichage de la date en format jour, mois, année
         {
 	$a=0;

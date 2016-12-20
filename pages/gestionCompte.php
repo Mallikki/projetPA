@@ -84,7 +84,7 @@ if(isset($_POST['modifier'])||isset($_POST['maj']))
 							</label>
 							<input type="email" id="mail_" name="email" class="form-control" value="<?php echo $client[0]->email?>" />
 						</div>
-						<button type="submit" name="maj" id="maj" value="Mettre à jour" value="Mettre à jour">
+						<button class="btn btn-primary" type="submit" name="maj" id="maj" value="Mettre à jour" value="Mettre à jour">
 							Mettre à jour
 						</button> 
 					</form>
