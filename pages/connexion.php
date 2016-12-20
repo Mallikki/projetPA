@@ -1,3 +1,21 @@
+<?php
+if(isset($_POST['submit_login'])){
+    $log = new ClientDB($cnx);
+    $retour = $log->isAuthorized($_POST['nom'], $_POST['mdp']);
+    if(!$retour==0){
+        $_SESSION['client']=$retour;
+		?>
+		<meta http-equiv="refresh" Content="0;url='./index.php?page=accueil'"/>
+		<?php
+    }
+    else {
+        $message = "Données incorrectes";
+    }    
+}
+
+?>
+
+<section id="message"><?php if (isset($message)) //print $message; ?></section>
 <section id="message">
     <?php if (isset($message)) print $message; ?></section>
 <div class="container" id="inline">

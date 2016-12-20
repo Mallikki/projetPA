@@ -1,8 +1,8 @@
 <!doctype html>
 <?php
 include ('./admin/lib/php/adm_liste_include.php');
-//$cnx = Connexion::getInstance($dsn, $user, $pass);
-//session_start();
+$cnx = Connexion::getInstance($dsn, $user, $pass);
+session_start();
 ?>
 
 <html>
@@ -14,6 +14,7 @@ include ('./admin/lib/php/adm_liste_include.php');
         <script src="admin/lib/js/jquery-3.1.1.js"></script>
         <script src="admin/lib/css/bootstrap-3.3.7/dist/js/bootstrap.js"></script>
         <script src="admin/lib/js/functionsBtJquery.js"></script>
+        <script src="admin/lib/js/fonctionsJQUERY.js" type="text/javascript"></script>
         <meta charset='UTF-8'/>
     </head>
 
@@ -23,15 +24,40 @@ include ('./admin/lib/php/adm_liste_include.php');
                  <img class="banner" src="admin/images/bannière.jpg" alt="Cinema L'objectif" title="L'Objectif"/>
                  <h1 class="titre">Cinéma L'objectif</h1>
                 </div>
+            
             </div>
         </header>
+        <div class="container">
+            <div class="col-sm-12">
+                <?php 
+                if (isset($_SESSION['client']))
+                {
+                $cli=new ClientDB($cnx);
+                $pseudo=$cli->read($_SESSION['client']);
+                echo "Connecté en tant que :".$pseudo[0]->pseudo;
+                }
+            ?>
+            </div>
+        </div>
     <brP>
         <div class="container">
             <div class="col-sm-12">
+            
                <?php
-                if (file_exists('./lib/php/menuPasConnecte.php')) {
+                  if (!isset($_SESSION['client']))
+                  {
+                    if (file_exists('./lib/php/menuPasConnecte.php')) {
                       include ('./lib/php/menuPasConnecte.php');
                     }
+                  }
+                  else
+                  {
+                     if (file_exists('./lib/php/menuConnecte.php')) {
+                      include ('./lib/php/menuConnecte.php');
+                    } 
+                  }
+                  
+                  
                 ?>   
                </div>
             <div class="row">

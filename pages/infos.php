@@ -1,5 +1,5 @@
 <?php
-
+$info = new PrixDB($cnx);
 ?>
         <div class="container2">
             <div class="row">
@@ -26,6 +26,17 @@
                 <h3 class="sstitre">Adresse</h3>
                 Rue du projecteur 8 <br/><br/>1000 Bruxelles
                 
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-sm-12">
+                <br/>
+                <h3 class="sstitre">Tarifs</h3>
+                Enfant: <?php $info->getPrixEnfant()?> <br/>
+                Adulte: 
+                <?php $info->getPrixAdulte() ?> <br/>
+                Etudiant:
+                <?php $info->getPrixEtudiant() ?> <br/>
             </div>
             </div>
              <div class="row">

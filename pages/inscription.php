@@ -1,3 +1,23 @@
+<?php
+if(isset($_POST['submit_create'])){
+    $log = new ClientDB($cnx);
+    //function create($nom, $prenom,$pseudo,$email,$mdp)
+    $retour = $log->create($_POST['nom'], $_POST['prenom'], $_POST['pseudo'], $_POST['email'], $_POST['mdp']);
+    if($retour!=0){
+        $_SESSION['client']=$retour;
+                echo "Votre compte a bien été créé!";?>
+		
+		<?php
+    }
+    else {
+        $message = "Données incorrectes";
+        echo $message;
+    }    
+}
+else
+{  
+
+?>
 <section id="message">
     <?php if (isset($message)) print $message; ?></section>
 <div class="container" id="inline">
@@ -28,10 +48,11 @@
         
         <div class="row">
             <div class="col-sm-4"><br/>
-                <input type="submit" name="submit_login" id="submit_login_" value="M'inscrire" />&nbsp;&nbsp;&nbsp;
+                <input type="submit" name="submit_create" id="submit_create" value="M'inscrire" />&nbsp;&nbsp;&nbsp;
                 <input type="reset" id="annuler" value="Réinitialiser" />
             </div>
         </div>       
         
     </form>
 </div>
+<?php } ?>

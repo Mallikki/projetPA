@@ -3,19 +3,42 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/Prix.class.php</file>
             <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/Connexion.class.php</file>
             <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/pages/accueil.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/introAccueil.php</file>
             <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/verifierCnx.php</file>
             <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/adm_liste_include.php</file>
-            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/InfoClient.class.php</file>
             <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/css/cinema.css</file>
-            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/footer.php</file>
-            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/lib/php/menu.php</file>
-            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/.gitignore</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/ClientDB.class.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/Client.class.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/pages/MesReservations.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/js/fonctionsJQUERY.js</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/adm_menu.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/index.php</file>
             <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/README.md</file>
             <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/dbConnect.php</file>
-            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/TexteIntro.class.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/js/jquery-3.1.1.js</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/pages/programme.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/lib/php/menuPasConnecte.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/FilmDB.class.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/footer.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/lib/php/menuConnecte.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/ReservationDB.class.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/SeanceDB.class.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/pages/infos.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/Login.class.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/.gitignore</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/pages/deconnexion.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/autoload.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/PrixDB.class.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/pages/inscription.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/pages/connexion.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/Reservation.class.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/Film.class.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/pages/gestionCompte.php</file>
             <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/index.php</file>
+            <file>file:/C:/Users/Maliki/Documents/NetBeansProjects/ProjetCinema/admin/lib/php/classes/Seance.class.php</file>
         </group>
     </open-files>
 </project-private>
