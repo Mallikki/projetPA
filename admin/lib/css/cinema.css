@@ -55,17 +55,27 @@ width:100%;
 .carousel{
     background: #2f4357;
     width:100%;
-    height:100%;
 }
 .item img{
     margin: 0 auto; /* Align slide image horizontally center */
-    width: 75%;
+    width: 60%;
 }
 .bs-example{
     margin: 10px;
 }
 
 /******************************* Gabarit *********************************/
+
+.affiche
+{
+    width: 50%;
+}
+.carousel-inner>.item>a>img,.carousel-inner>.item>img,.img-responsive,.thumbnail a>img,.thumbnail>img
+{
+    display:block;
+    max-width:100%;
+    height:450px; /*La hauteur que tu veux pour ton carousel*/
+}
 
 .container2
 {
@@ -90,15 +100,14 @@ width:100%;
     border-radius:10px 0;
     position:absolute;
 }
-html{
-       background-image: url('./admin/images/fong.jpg');
+body{
+background-image: url("../../images/fond.jpg");
+margin:0;
+width: 100%;
+height: 100%;
+background-repeat:repeat;
+}
 
-}
-body {
-   margin:0;
-	width: 100%;
-	background-repeat:repeat;
-}
 header {
     width:102%;
     margin:auto 0;
@@ -145,20 +154,21 @@ footer {
     font-weight: bold;
 }	
 
-.banner
-{
-    width:100%;
-    height: 150px;
-    border:solid black 2px;
-     opacity: 0.5;
-    filter: alpha(opacity=50);
-}
-
 #itemMenu
 {
     color:#184464;
     margin-left: 30px;
     margin-right:30px;
+}
+
+.titreSite
+{
+    color:#184464;
+}
+
+.titreSite:hover
+{
+     color:#184464;
 }
 
 

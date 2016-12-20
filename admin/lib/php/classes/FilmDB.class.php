@@ -30,19 +30,26 @@ class FilmDB extends Film{
     }
     
     public function getFilmID($id) {
-        try {
-            $query = "SELECT * FROM FILM where id_film =:id_film";
+       try {
+            $query = "SELECT * FROM FILM where id_film=:id_film";
             $resultset = $this->_db->prepare($query);
             $resultset->bindValue(1, $id);
             $resultset->execute();
-            while($data = $resultset->fetch() )
-            {
-                print $data['titre'];
-            } 
-        }
-        catch (PDOException $e) {
+            $data = $resultset->fetchAll();
+            $resultset->execute();
+        } catch (PDOException $e) {
             print $e->getMessage();
         }
+
+        while ($data = $resultset->fetch()) {
+            try {
+                $_typeArray[] = new Film($data);
+            } catch (PDOException $e) {
+                print $e->getMessage();
+                
+            }
+        }
+        return $_typeArray;
     }
     
     

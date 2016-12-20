@@ -1,7 +1,8 @@
 <?php
 ?>
 <div class="row">
-    <div class="col-sm-5">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
         <div id="gt_carousel" class="carousel slide" data-ride="carousel">
             <!-- Carousel indicators : qui indiquent l'image affichée -->
             <ol class="carousel-indicators">
@@ -36,13 +37,16 @@
             </a>
         </div>
     </div>
-    <div id="intro2" class="col-sm-7"><br/>
-            <?php
-                if (file_exists('./admin/lib/php/introAccueil.php')) {
-                    include ('./admin/lib/php/introAccueil.php');
-                } 
-                ?>
-        </p> 
+    <div class="col-sm-3"></div>
+    <div class="row">
+        <div id="intro2" class="col-sm-12"><br/>
+                <?php
+                    if (file_exists('./admin/lib/php/introAccueil.php')) {
+                        include ('./admin/lib/php/introAccueil.php');
+                    } 
+                    ?>
+            </p> 
+        </div>
     </div>
 </div>
 

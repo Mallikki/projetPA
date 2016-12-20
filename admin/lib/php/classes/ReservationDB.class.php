@@ -110,4 +110,6 @@ class ReservationDB extends Reservation{
 	$c=substr($string,8,2);
 	return $c."/".$b."/".$a;
         }
+        
+        
 }

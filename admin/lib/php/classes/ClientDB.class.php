@@ -53,7 +53,7 @@ class ClientDB extends Client {
 
         while ($data = $resultset->fetch()) {
             try {
-                $_typeArray[] = new Seance($data);
+                $_typeArray[] = new Client($data);
             } catch (PDOException $e) {
                 print $e->getMessage();
             }

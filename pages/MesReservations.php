@@ -1,5 +1,5 @@
 <?php
-$info = new ReservationDB($cnx);
+$info = new VueReservationDB($cnx);
 $texte=$info->VueReservSelonClient($_SESSION['client']);
 if ($texte!=0)
 {

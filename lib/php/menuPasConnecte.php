@@ -2,7 +2,7 @@
 ?>
         <nav id="menu" class="navbar navbar-default">
                <ul class="nav navbar-nav"> 
-                    <li ><a id="itemMenu" href="./index.php?page=accueil">Accueil</a></li> 
+                    <li ><a class="titreSite" href="./index.php?page=accueil">L'Objectif</a></li> 
                     <li><a id="itemMenu" href="./index.php?page=programme">Programme</a></li> 
                     <li class="dropdown">
                         <a id="itemMenu" href="#" class="dropdown-toggle" data-toggle="dropdown">Connexion<b class="caret"></b> </a>

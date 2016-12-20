@@ -32,11 +32,11 @@ $info = new PrixDB($cnx);
             <div class="col-sm-12">
                 <br/>
                 <h3 class="sstitre">Tarifs</h3>
-                Enfant: <?php $info->getPrixEnfant()?> <br/>
+                Enfant: <?php $info->getPrixEnfant()?> €<br/>
                 Adulte: 
-                <?php $info->getPrixAdulte() ?> <br/>
+                <?php $info->getPrixAdulte() ?> €<br/>
                 Etudiant:
-                <?php $info->getPrixEtudiant() ?> <br/>
+                <?php $info->getPrixEtudiant() ?> €<br/>
             </div>
             </div>
              <div class="row">
