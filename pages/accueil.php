@@ -18,7 +18,7 @@
 				</ol>
 				<div class="carousel-inner">
 					<div class="item active">
-						<img alt="Carousel Bootstrap First" src="./admin/images/affiches/shaun.jpg" />
+						<img alt="Carousel Bootstrap First" src="./admin/images/affiches/carousel/shaun.jpg" />
 						<div class="carousel-caption">
 							<h4 class="textIntro">
 								Objectivité, telle est notre mission!
