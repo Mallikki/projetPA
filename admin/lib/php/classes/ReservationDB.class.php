@@ -28,22 +28,7 @@ class ReservationDB extends Reservation{
         }
         return $_typeArray;
     }
-    
-    public function Read($id) {
-        try {
-            $query = "SELECT * from reservation where num_res=:id";
-            $resultset = $this->_db->prepare($query);
-            $resultset->bindValue(1, $id);
-            $resultset->execute();
-            while($data = $resultset->fetch() )
-            {
-                echo $date;
-            } 
-        }
-        catch (PDOException $e) {
-            print $e->getMessage();
-        }
-    }
+   
     
     public function getAllReservationsParClient($id) {
         try {
@@ -148,5 +133,63 @@ class ReservationDB extends Reservation{
 	return $c."/".$b."/".$a;
         }
         
+        function delete($id)
+        {
+           try {
+             $query="select delete_res (:id) as retour"; 
+             $sql = $this->_db->prepare($query);
+             $sql->bindValue(':id',$id);
+             $sql->execute();
+             $retour = $sql->rowCount();
+        }
+        catch(PDOException $e) {
+              print "Erreur lors de la suppression ".$e->getMessage();
+        }
+        return $retour;
+
+        }
+        
+        function read($id)
+        {
+            try {
+            $query = "SELECT * FROM reservation where num_res=:id";
+            $resultset = $this->_db->prepare($query);
+            $resultset->bindValue(1, $id);
+            $resultset->execute();
+         } catch (PDOException $e) {
+            print $e->getMessage();
+        }
+
+        while ($data = $resultset->fetch()) {
+            try {
+                $_typeArray[] = new Client($data);
+            } catch (PDOException $e) {
+                print $e->getMessage();
+            }
+        }
+        return $_typeArray;
+        
+        }
+        
+        //adulte, enfants,etudiant,reservation,client
+    function maj($ad,$enf,$et,$res,$cli)
+    {
+       try{
+            $retourupdate=array();
+            $query="select majres (:ad,:enf,:et,:res,:cli) as retour";
+             $sql = $this->_db->prepare($query);
+            $sql->bindValue(':ad',$ad);
+            $sql->bindValue(':enf',$enf);
+            $sql->bindValue(':et',$et);
+            $sql->bindValue(':res',$res);
+             $sql->bindValue(':cli',$cli);
+            $sql->execute();
+            $retourupdate = $sql->fetchColumn(0);
+        } catch (PDOException $ex) {
+            print $ex->getMessage();
+        }
+        return $retourupdate;
+        
+    }
         
 }

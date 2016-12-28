@@ -115,6 +115,7 @@ class ClientDB extends Client {
     return $retour;
         
     }
+    
       function RechCli($pseudo,$mdp)
     {
        try{

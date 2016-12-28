@@ -5,8 +5,8 @@
 		<div class="col-md-12">
 			<div class="tabbable" id="tabs-91809">
 				<ul class="nav nav-tabs">
-					<li class="active">
-                                            <a href="./index.php?page=accueil">L'Objectif</a>
+					<li>
+                                            <div class="ongletPrinc"><a href="./index.php?page=accueil">L'Objectif</a></div>
 					</li>
 					<li>
 						<a href="./index.php?page=programme">Programme</a>

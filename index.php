@@ -47,7 +47,7 @@ session_start();
                 {
                 $cli=new ClientDB($cnx);
                 $pseudo=$cli->read($_SESSION['client']);
-                print "<span class=\"blanc\">Bienvenue, </span><a href=\"./index.php?page=gestionCompte\">" .$pseudo[0]->pseudo. "</a>";
+                print "<span class=\"blanc\">Bienvenue, </span><a href=\"./index.php?page=MesReservations\">" .$pseudo[0]->pseudo. "</a>";
                 }
             ?>
             </div>

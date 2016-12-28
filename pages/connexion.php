@@ -13,10 +13,14 @@ if(isset($_POST['submit_login'])){
 				</button>
 				<h4>
 				 Bravo!
-				</h4>Vous êtes bien connecté(e)! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
+				</h4>Vous êtes bien connecté(e)! 
 			</div>
 		</div>
 		<?php
+                
+                print "<meta http-equiv=\"refresh\": Content=\"0;URL=./index.php\">";
+               print "<meta http-equiv=\"refresh\": Content=\"0;URL=./pages/accueil.php\">";
+                exit();
     }
     else {
         ?>
