@@ -77,6 +77,27 @@ class ClientDB extends Client {
         
     }
     
+     function readAll()
+    {
+       try {
+            $query = "SELECT * FROM CLIENT";
+            $resultset = $this->_db->prepare($query);
+            $resultset->execute();
+         } catch (PDOException $e) {
+            print $e->getMessage();
+        }
+
+        while ($data = $resultset->fetch()) {
+            try {
+                $_typeArray[] = new Client($data);
+            } catch (PDOException $e) {
+                print $e->getMessage();
+            }
+        }
+        return $_typeArray;
+        
+    }
+    
     function maj($nom, $prenom,$pseudo,$email,$id)
     {
        try{

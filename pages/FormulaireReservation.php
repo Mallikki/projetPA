@@ -6,7 +6,7 @@ if(isset($_GET['reserver'])){
         if ($reservation==0)
         {
             $reservation2=$res->create($_GET['adulte'], $_GET['enfant'], $_GET['etudiant'], $_GET['id_seance'], $_SESSION['client']);
-            if($reservation2!=0){
+            if($reservation2>0){
                         ?>
                         <div class="col-md-12">
                             <div class="alert alert-dismissable alert-success">
@@ -16,10 +16,26 @@ if(isset($_GET['reserver'])){
                                     </button>
                                     <h4>
                                      Bravo!
-                                    </h4>Vos données ont été modifiées! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
+                                    </h4>Votre réservation a été effectuée! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
                             </div>
                     </div>
                         <?php
+            }
+            else if ($reservation=-1)
+            {
+                ?>
+                <div class="col-md-12">
+                            <div class="alert alert-dismissable alert-danger">
+
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                            ×
+                                    </button>
+                                    <h4>
+                                            Mais enfin...
+                                    </h4> Vous devez au moins réserver pour une personne!
+                            </div>
+                    </div>
+                   <?php
             }
             else
             {

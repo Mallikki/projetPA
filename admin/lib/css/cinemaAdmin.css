@@ -6,6 +6,21 @@
      
 }
 
+.ongletPrinc
+{
+    font-size:20px;
+    font-family: Impact;
+    font-weight: bold;
+    
+    font-stretch:expanded;
+}
+
+.ongletSec
+{
+    font-size: 20px;
+    height: 100%;
+}
+
 .icone
 {
     width:20%;

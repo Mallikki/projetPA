@@ -6,22 +6,22 @@
 			<div class="tabbable" id="tabs-91809">
 				<ul class="nav nav-tabs">
 					<li>
-                                            <div class="ongletPrinc"><a href="./index.php?page=accueil">L'Objectif</a></div>
+                                            <a class="ongletPrinc" href="./index.php?page=accueil">L'Objectif</a>
 					</li>
 					<li>
-						<a href="./index.php?page=programme">Programme</a>
+						<a class="ongletSec" href="./index.php?page=programme">Programme</a>
 					</li>
                                         <li>
-						<a href="./index.php?page=gestionCompte">Mon Compte</a>
+						<a class="ongletSec" href="./index.php?page=gestionCompte">Mon Compte</a>
 					</li>
                                         <li>
-						<a href="./index.php?page=MesReservations">Mes réservations</a>
+						<a  class="ongletSec"href="./index.php?page=MesReservations">Mes réservations</a>
 					</li>
                                         <li>
-						<a href="./index.php?page=infos">infos Pratiques</a>
+						<a class="ongletSec" href="./index.php?page=infos">infos Pratiques</a>
 					</li>
                                         <li>
-						<a href="./pages/deconnexion.php">Déconnexion</a>
+						<a class="ongletSec" href="./pages/deconnexion.php">Déconnexion</a>
 					</li>
 				</ul>
 			</div>

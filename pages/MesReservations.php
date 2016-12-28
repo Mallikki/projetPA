@@ -51,7 +51,7 @@ if (isset($_GET['delete'])||isset($_GET['misaj']))
         $log = new ReservationDB($cnx);
         //function create($nom, $prenom,$pseudo,$email,$mdp)
         $retour = $log->maj($_POST['adulte'], $_POST['enfant'], $_POST['etudiant'], $_GET['id_res'], $client[0]->id_client);
-        if($retour!=0){
+        if($retour>0){
                     ?>
                     <div class="col-md-12">
 			<div class="alert alert-dismissable alert-success">
@@ -61,10 +61,28 @@ if (isset($_GET['delete'])||isset($_GET['misaj']))
 				</button>
 				<h4>
 				 Bravo!
-				</h4>Vos données ont été modifiées! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
+				</h4>Votre réservation a été modifée! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
 			</div>
 		</div>
                     <?php
+        }
+        else if ($retour=-1)
+        {
+            ?>
+            <div class="row">
+		<div class="col-md-12">
+			<div class="alter alert-dismissable alert-danger">
+				 
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+					×
+				</button>
+				<h4>
+                                    Mais...
+				</h4> Vous devez au moins réserver pour une personne!
+			</div>
+		</div>
+	</div>
+    <?php
         }
         else {
             ?>

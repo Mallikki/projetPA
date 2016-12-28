@@ -38,8 +38,10 @@ session_start();
                 ?>   
                </div>
                 <div class="col-sm-3"></div>
+            </div>
                 <div class="row">
-                <div class="col-sm-12">
+                    <div class="col-sm-2"></div>
+                <div class="col-sm-8">
                     
                     <section id="main">
                         <?php
@@ -65,6 +67,7 @@ session_start();
                         ?>  
                     </section>
                 </div>
+                    <div class="col-sm-2"></div>
                 </div>
             </div>
         </div>

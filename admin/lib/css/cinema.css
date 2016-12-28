@@ -8,12 +8,22 @@
 
 .ongletPrinc
 {
-    font-size:20px;
+    font-size:23px;
+    font-family: Impact;
+    font-weight: bold;
+    font-stretch:expanded;
 }
+
+.ongletSec
+{
+    font-size: 22px;
+}
+
 .icone
 {
     width:20%;
 }
+
 
 div#list_de_trucs{
     
@@ -59,12 +69,11 @@ width:100%;
 .carousel{
     background: #000000;
     width:100%;
-    height: 100%;
 }
+
 .item img{
-    margin: 0 auto; /* Align slide image horizontally center */
     width: 100%;
-    height: 100%;
+    margin: 0 auto; /* Align slide image horizontally center */
 }
 .bs-example{
     margin: 10px;
@@ -82,10 +91,7 @@ width:100%;
 {
     text-align: center;
 }
-.affiche
-{
-    width: 80%;
-}
+
 .carousel-inner>.item>a>img,.carousel-inner>.item>img,.img-responsive,.thumbnail a>img,.thumbnail>img
 {
     display:block;
@@ -151,6 +157,11 @@ width:100%;
 #tooltip .tipFooter {
     height:8px;
     background-color: red;
+}
+
+.affiche
+{
+    width: 50%;
 }
 
 

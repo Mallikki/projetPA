@@ -109,9 +109,21 @@ else if (isset($_POST['supprimer']))
                     print "<meta http-equiv=\"refresh\": Content=\"0;URL=./pages/deconnexion.php\">";
         }
         else {
-            $message = "Oups! Une erreur est survenue!";
-            
-            echo $message;
+            ?>
+            <div class="row">
+		<div class="col-md-12">
+			<div class="alter alert-dismissable alert-danger">
+				 
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+					×
+				</button>
+				<h4>
+					Oups!
+				</h4> Une erreur est survenue
+			</div>
+		</div>
+	</div>
+<?php
         } 
     }
 else {
@@ -161,20 +173,22 @@ else {
                 <div class="row">
 				<div class="col-md-4">
 				</div>
-				<div class="col-md-2">
-                                    <form id="modifier" name="modifier" method="post">
-                                                        <button  type="submit" name="modifier" id="modifier" value="Modifier mes informations" class="btn btn-primary"">
-                                                                Modifier mes infos
-                                                        </button>
-                                                            </form>
-				</div>
-				<div class="col-md-2">
-                                    <form id="supprimer" name="supprimer" method="post">
-                                                         <button type="submit" name="supprimer" id="supprimer" value="Supprimer mon compte" class="btn btn-warning">
-                                                                Supprimer mon compte
-                                                        </button>
-                                                            </form>
-				</div>
+                                <div>
+                                    <div class="col-md-2">
+                                        <form id="modifier" name="modifier" method="post">
+                                                            <button  type="submit" name="modifier" id="modifier" value="Modifier mes informations" class="btn btn-primary"">
+                                                                    Modifier mes infos
+                                                            </button>
+                                                                </form>
+                                    </div>
+                                    <div class="col-md-2 ">
+                                        <form id="supprimer" name="supprimer" method="post">
+                                                             <button type="submit" name="supprimer" id="supprimer" value="Supprimer mon compte" class="btn btn-warning">
+                                                                    Supprimer mon compte
+                                                            </button>
+                                                                </form>
+                                    </div>
+                ²               </div>
 				<div class="col-md-4">
 				</div>
 			</div>

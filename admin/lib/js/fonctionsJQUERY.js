@@ -61,6 +61,13 @@ $('document').ready(function(){
         $(this).children('div#tooltip2').remove();
  
     });
+
+  
+  $("#menu li a").click(function() {
+    $(this).parent().addClass('selected').siblings().removeClass('selected');
+
+    });
+  
 });
 
 

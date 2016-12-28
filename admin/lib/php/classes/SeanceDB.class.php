@@ -9,7 +9,7 @@ class SeanceDB extends Seance{
 
     public function getSeance() {
         try {
-            $query = "SELECT * FROM SEANCE";
+            $query = "SELECT * FROM SEANCE where dat>CURRENT_DATE";
             $resultset = $this->_db->prepare($query);
             $resultset->execute();
             $data = $resultset->fetchAll();
@@ -28,6 +28,23 @@ class SeanceDB extends Seance{
         }
         return $_typeArray;
     }
+    
+    function delete($id)
+        {
+           try {
+             $query="delete from seance where id_seance=:id"; 
+             $sql = $this->_db->prepare($query);
+             $sql->bindValue(':id',$id);
+             $sql->execute();
+             
+             $retour = $sql->rowCount();
+        }
+        catch(PDOException $e) {
+              print "Erreur lors de la suppression ".$e->getMessage();
+        }
+        return $retour;
+
+        }
     
     public function Read($id) {
         try {
@@ -68,6 +85,20 @@ class SeanceDB extends Seance{
             print $e->getMessage();
         }
     }
+    
+    public function RechSeance($id) {
+        try{
+            $retour=array();
+            $query="select rechseance (:id) as retour";
+             $sql = $this->_db->prepare($query);
+            $sql->bindValue(':id',$id);
+            $sql->execute();
+            $retour = $sql->fetchColumn(0);
+        } catch (PDOException $ex) {
+            print $ex->getMessage();
+        }
+        return $retour;
+    }
        
     function transform($string) //fonction d'affichage de la date en format jour, mois, année
 {
@@ -79,6 +110,25 @@ class SeanceDB extends Seance{
 	$c=substr($string,8,2);
 	return $c."/".$b."/".$a;
 }
+
+    function create($film,$salle,$heure,$date)
+    {
+       try{
+            $retour=array();
+            $query="select creaseance (:film,:salle,:heure,:date) as retour";
+             $sql = $this->_db->prepare($query);
+            $sql->bindValue(':film',$film);
+            $sql->bindValue(':salle',$salle);
+            $sql->bindValue(':heure',$heure);
+            $sql->bindValue(':date',$date);
+            $sql->execute();
+            $retour = $sql->fetchColumn(0);
+        } catch (PDOException $ex) {
+            print $ex->getMessage();
+        }
+        return $retour;
+        
+    }
     
     
 }

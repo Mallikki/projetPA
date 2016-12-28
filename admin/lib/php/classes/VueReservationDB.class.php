@@ -40,6 +40,28 @@ class VueReservationDB extends VueReservation{
         }
     }
     
+    public function getAllReservations() {
+        try {
+            $query = "SELECT * FROM reserv order by dat";
+            $resultset = $this->_db->prepare($query);
+            $resultset->execute();
+            $data = $resultset->fetchAll();
+
+            $resultset->execute();
+        } catch (PDOException $e) {
+            print $e->getMessage();
+        }
+
+        while ($data = $resultset->fetch()) {
+            try {
+                $_typeArray[] = new Reservation($data);
+            } catch (PDOException $e) {
+                print $e->getMessage();
+            }
+        }
+        return $_typeArray;
+    }
+    
       function transform($string) //fonction d'affichage de la date en format jour, mois, année
         {
 	$a=0;

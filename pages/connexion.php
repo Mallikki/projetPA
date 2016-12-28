@@ -4,23 +4,7 @@ if(isset($_POST['submit_login'])){
     $retour = $log->isAuthorized($_POST['nom'], $_POST['mdp']);
     if(!$retour==0){
         $_SESSION['client']=$retour;
-		?>
-		<div class="col-md-12">
-			<div class="alert alert-dismissable alert-success">
-				 
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-					×
-				</button>
-				<h4>
-				 Bravo!
-				</h4>Vous êtes bien connecté(e)! 
-			</div>
-		</div>
-		<?php
-                
-                print "<meta http-equiv=\"refresh\": Content=\"0;URL=./index.php\">";
-               print "<meta http-equiv=\"refresh\": Content=\"0;URL=./pages/accueil.php\">";
-                exit();
+                header('Location: ./index.php?page=accueil');     
     }
     else {
         ?>
@@ -33,7 +17,7 @@ if(isset($_POST['submit_login'])){
 				</button>
 				<h4>
 					Attention
-				</h4> Vos informations de connexion sont erronées!
+				</h4> Vos informations de connexion sont erronées! 
 			</div>
 		</div>
 	</div>
@@ -47,6 +31,7 @@ if(isset($_POST['submit_login'])){
 <section id="message">
     <?php if (isset($message)) print $message; ?></section>
 <div class="container-fluid">
+    
 	<div class="row ">
 		<div class="col-md-12">
 			<div class="row">

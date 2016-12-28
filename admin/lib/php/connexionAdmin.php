@@ -29,7 +29,7 @@ if(isset($_POST['submit_login'])){
 				</button>
 				<h4>
 					Attention
-				</h4> Vos informations de connexion sont erronées!
+				</h4> Vos informations de connexion sont erronées! <a href="./index.php?page=accueil" class="alert-link">Retour</a>
 			</div>
 		</div>
 	</div>
@@ -45,6 +45,9 @@ if(isset($_POST['submit_login'])){
 <section id="message">
     <?php if (isset($message)) print $message; ?></section>
 <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12"><br><br><br><br></div>
+    </div>
 	<div class="row ">
 		<div class="col-md-12">
 			<div class="row">

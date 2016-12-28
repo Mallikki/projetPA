@@ -9,7 +9,7 @@ class ReservationDB extends Reservation{
 
     public function getAllReservations() {
         try {
-            $query = "SELECT * FROM Reservation";
+            $query = "SELECT * FROM Reservation where dat>CURRENT_DATE";
             $resultset = $this->_db->prepare($query);
             $resultset->execute();
             $data = $resultset->fetchAll();
@@ -32,7 +32,7 @@ class ReservationDB extends Reservation{
     
     public function getAllReservationsParClient($id) {
         try {
-            $query = "SELECT * FROM Reservation where id_client=:id_client";
+            $query = "SELECT * FROM Reservation where id_client=:id_client and where dat>CURRENT_DATE";
             $resultset = $this->_db->prepare($query);
             $resultset->bindValue(1, $id);
             $resultset->execute();
@@ -55,7 +55,7 @@ class ReservationDB extends Reservation{
     public function VueReservSelonClient($id) {
         $ok=0;
         try {
-            $query = "SELECT * FROM reserv where id_client=:id_client";
+            $query = "SELECT * FROM reserv where id_client=:id_client and where dat>CURRENT_DATE";
             $resultset = $this->_db->prepare($query);
             $resultset->bindValue(1, $id);
             $resultset->execute();
@@ -152,7 +152,7 @@ class ReservationDB extends Reservation{
         function read($id)
         {
             try {
-            $query = "SELECT * FROM reservation where num_res=:id";
+            $query = "SELECT * FROM reservation where num_res=:id ";
             $resultset = $this->_db->prepare($query);
             $resultset->bindValue(1, $id);
             $resultset->execute();
