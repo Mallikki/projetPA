@@ -17,7 +17,7 @@ if (isset($_GET['ajout']))
 				</button>
 				<h4>
 					Attention
-				</h4> La date sélectionnée ne doit pas être antérieure à celle d'aujourd'hui <a href="./index.php?page=programme" class="alert-link">   Retour</a>
+				</h4> La date sélectionnée ne doit pas être antérieure à celle d'aujourd'hui <a href="./index.php?page=creaSeance" class="alert-link">   Retour</a>
 			</div>
 		</div>
 	</div>
@@ -66,7 +66,7 @@ if (isset($_GET['ajout']))
 				</button>
 				<h4>
 				 Bravo!
-				</h4>Votre séance a bien été crée! <a href="./index.php?page=creaSeance" class="alert-link">  Retour</a>
+				</h4>Votre séance a bien été crée! <a href="./index.php?page=programme class="alert-link">  Retour</a>
 			</div>
 		</div>
                 <?php
@@ -109,7 +109,7 @@ $nbreT=count($f);
 					<h3>
 						Nouvelle séance
 					</h3>
-					<form action="<?php print $_SERVER['PHP_SELF']; ?>" method="get">
+					<form action="<?php print $_SERVER['PHP_SELF']; ?>" method="get" id="form_seance">
 						<div class="form-group">
 							 
 							<label>

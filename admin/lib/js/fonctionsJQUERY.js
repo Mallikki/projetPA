@@ -60,14 +60,30 @@ $('document').ready(function(){
         // Supprimer notre infobulle
         $(this).children('div#tooltip2').remove();
  
+    }); 
+    
+    $("#id_client").blur(function () {
+        var id = $("#id_client").val();
+            recherche = "id_client=" + id;
+            $.ajax({
+
+                type: "GET",
+                data: recherche,
+                dataType: "json",
+                url: './admin/lib/php/ajax/AjaxGetClient.php',
+                success: function (data) {
+                    $("#nom").val(data[0].nom);
+                    $("#prenom").val(data[0].prenom);
+                    $("#email").val(data[0].email);
+                    $("#pseudo").val(data[0].pseudo);
+                    console.log(data[0].id_client);
+                }
+
+            });
+        
     });
 
-  
-  $("#menu li a").click(function() {
-    $(this).parent().addClass('selected').siblings().removeClass('selected');
-
-    });
-  
 });
+
 
 

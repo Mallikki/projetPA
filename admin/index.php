@@ -11,9 +11,12 @@ session_start();
         <link rel="icon" href="./images/favicon.ico" />
         <link rel="stylesheet" type="text/css" href="./lib/css/bootstrap-3.3.7/dist/css/bootstrap.css" />
        <link rel="stylesheet" type="text/css" href="./lib/css/cinemaAdmin.css"/> 
-        <script src="./lib/js/jquery-3.1.1.js"></script>
+                <script src="./lib/js/jquery-3.1.1.js"></script>
+        <script src="./lib/js/jquery-validation-1.15.0/dist/jquery.validate.min.js" type="text/javascript"></script>
+        <script src="./lib/js/fonctionsJQUERY.js" type="text/javascript"></script>
+        <script src="./lib/js/messages.js" type="text/javascript"></script>
+        <script src="./lib/js/valeurs.js" type="text/javascript"></script>
         <script src="./lib/css/bootstrap-3.3.7/dist/js/bootstrap.js"></script>
-        <script src="./lib/js/functionsBtJquery.js"></script>
         <meta charset='UTF-8'/>
     </head>
 

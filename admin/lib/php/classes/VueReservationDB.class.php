@@ -42,7 +42,7 @@ class VueReservationDB extends VueReservation{
     
     public function getAllReservations() {
         try {
-            $query = "SELECT * FROM reserv order by dat";
+            $query = "SELECT * FROM reserv order by id_client";
             $resultset = $this->_db->prepare($query);
             $resultset->execute();
             $data = $resultset->fetchAll();

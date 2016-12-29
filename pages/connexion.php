@@ -1,7 +1,7 @@
 <?php
 if(isset($_POST['submit_login'])){
     $log = new ClientDB($cnx);
-    $retour = $log->isAuthorized($_POST['nom'], $_POST['mdp']);
+    $retour = $log->isAuthorized($_POST['login'], $_POST['mdp']);
     if(!$retour==0){
         $_SESSION['client']=$retour;
                 header('Location: ./index.php?page=accueil');     
@@ -35,26 +35,26 @@ if(isset($_POST['submit_login'])){
 	<div class="row ">
 		<div class="col-md-12">
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-4 col-sm-4 col-xs-3">
 				</div>
-				<div class="col-md-4 bord">
+				<div class="col-md-4 col-sm-4 col-xs-6 bord">
 					<h3>
 						Connexion
 					</h3>
-					<form action="" method='post' id="">
+					<form action="" method='post' id="form_auth">
 						<div class="form-group">
 							 
 							<label>
 								Login
 							</label>
-							<input type="text" id="nom_" name="nom" class="form-control" />
+							<input type="text" id="login" name="login" class="form-control" />
 						</div>
 						<div class="form-group">
 							 
 							<label for="exampleInputPassword1">
 								Mot de passe
 							</label>
-							<input type="password" id="pass_" name="mdp" class="form-control" />
+							<input type="password" id="mdp" name="mdp" class="form-control" />
 						</div>
 						<button type="submit" class="btn btn-primary" name="submit_login" id="submit_login_" value="Me connecter">
 							Me connecter
@@ -62,7 +62,7 @@ if(isset($_POST['submit_login'])){
 					</form>
                                     <br/>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4 col-sm-4 col-xs-3">
 				</div>
 			</div>
 		</div>

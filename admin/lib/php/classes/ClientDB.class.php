@@ -80,7 +80,7 @@ class ClientDB extends Client {
      function readAll()
     {
        try {
-            $query = "SELECT * FROM CLIENT";
+            $query = "SELECT * FROM CLIENT order by nom asc";
             $resultset = $this->_db->prepare($query);
             $resultset->execute();
          } catch (PDOException $e) {

@@ -31,10 +31,10 @@ if (isset($_GET['reserver'])&&(!isset($_SESSION['client'])))
             <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="get">
 		<div class="col-md-12"  >
 			<div class="row" >
-				<div class="col-md-3">
+				<div class="col-md-3 col-sm-3 col-xs-3">
 					<img class="affiche" alt="affiche" src='./admin/images/affiches/<?php echo $flim[0]->affiche;?>'/>
 				</div>
-				<div class="col-md-5">
+				<div class="col-md-5 col-sm-3 col-xs-3">
 					<h3>
 						<?php print utf8_encode($flim[0]->titre);?>
 					</h3>
@@ -51,7 +51,7 @@ if (isset($_GET['reserver'])&&(!isset($_SESSION['client'])))
 						<?php print "Réalisateur: " .$flim[0]->realisateur?>
 					</p>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4 col-sm-3 col-xs-3">
 					<h2>
 						Séance
 					</h2>

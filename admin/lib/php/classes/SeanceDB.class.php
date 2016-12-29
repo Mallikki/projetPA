@@ -9,7 +9,7 @@ class SeanceDB extends Seance{
 
     public function getSeance() {
         try {
-            $query = "SELECT * FROM SEANCE where dat>CURRENT_DATE";
+            $query = "SELECT * FROM SEANCE where dat>CURRENT_DATE order by dat";
             $resultset = $this->_db->prepare($query);
             $resultset->execute();
             $data = $resultset->fetchAll();

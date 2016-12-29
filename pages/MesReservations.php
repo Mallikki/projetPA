@@ -110,41 +110,41 @@ if (isset($_GET['delete'])||isset($_GET['misaj']))
     
             <div class="container-fluid">
             <div class="row ">
-                    <div class="col-md-12">
+                    <div class="col-md-12 col-xs-12">
                             <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-sm-4">
                                     </div>
-                                    <div class="col-md-4 bord">
+                                    <div class="col-md-4 col-sm-4 col-xs-12 bord">
                                             <h3>
                                                    Modification de votre réservation
                                             </h3>
-                                            <form method="post" id="form_auth_">
+                                            <form method="post" id="form_res">
                                                     <div class="form-group">
 
                                                             <label>
                                                                     Enfants
                                                             </label>
-                                                            <input type="number" id="enf_" value="<?php print $texte[0]->enfant?>" name="enfant"  min="0" max="20" class="form-control" />
+                                                            <input type="text" id="enfant" value="<?php print $texte[0]->enfant?>" name="enfant"  class="form-control" />
                                                     </div>
                                                     <div class="form-group">
 
                                                             <label>
                                                                     Adultes
                                                             </label>
-                                                            <input ttype="number" value="<?php print $texte[0]->adulte?>" id="adu_" name="adulte" min="0" max="20" class="form-control" />
+                                                            <input ttype="text" value="<?php print $texte[0]->adulte?>" id="adulte" name="adulte" class="form-control" />
                                                     </div>
                                                     <div class="form-group">
 
                                                             <label>
                                                                     Etudiants
                                                             </label>
-                                                            <input type="number" id="etu_" value="<?php print $texte[0]->etudiant?>" name="etudiant" min="0" max="20" class="form-control" />
+                                                            <input type="text" id="etudiant" value="<?php print $texte[0]->etudiant?>" name="etudiant" class="form-control" />
                                                     </div>
                                                    <input class="btn btn-primary" type="submit" name="modifier" id="modifier" value="Modifier ma réservation"/>
                                             </form>
                                         <br/>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-sm-4">
                                     </div>
                             </div>
                     </div>

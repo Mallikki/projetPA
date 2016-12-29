@@ -97,33 +97,33 @@ $flim=$film->getFilmID($texte[0]->id_film);
 	<div class="row ">
 		<div class="col-md-12">
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-4 col-sm-4 col-xs-3">
 				</div>
-				<div class="col-md-4 bord">
+				<div class="col-md-4 col-sm-4 col-xs-6 bord">
 					<h3>
 						<?php echo utf8_encode($flim[0]->titre);?>, le <?php print $info->getDate($texte[0]->id_seance)." "?> à <?php print $texte[0]->heure;?> 
 					</h3>
-					<form action="<?php print $_SERVER['PHP_SELF']; ?>" method='get' id="form_auth_">
+					<form action="<?php print $_SERVER['PHP_SELF']; ?>" method='get' id="form_res">
 						<div class="form-group">
 							 
 							<label>
 								Enfants
 							</label>
-							<input type="number" id="enf_" name="enfant"  min="0" max="20" class="form-control" />
+							<input type="text" id="enfant" name="enfant"  class="form-control" />
 						</div>
 						<div class="form-group">
 							 
 							<label>
 								Adultes
 							</label>
-							<input ttype="number" id="adu_" name="adulte" min="0" max="20" class="form-control" />
+							<input type="text" id="adulte" name="adulte" class="form-control" />
 						</div>
                                                 <div class="form-group">
 							 
 							<label>
 								Etudiants
 							</label>
-							<input type="number" id="etu_" name="etudiant" min="0" max="20" class="form-control" />
+							<input type="text" id="etudiant" name="etudiant" class="form-control" />
 						</div>
                                                 <input type="hidden" name="id_seance" value="<?php print $_GET['id_seance'];?>"/>
 						<input class="btn btn-primary" type="submit" name="reserver" id="reserver" value="Réserver mes places"/>
@@ -131,7 +131,7 @@ $flim=$film->getFilmID($texte[0]->id_film);
 					</form>
                                     <br/>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4 col-sm-4 col-xs-3">
 				</div>
 			</div>
 		</div>

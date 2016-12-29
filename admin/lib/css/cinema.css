@@ -159,11 +159,9 @@ width:100%;
     background-color: red;
 }
 
-.affiche
-{
-    width: 50%;
+.ongletSec .active {
+  background: yellow;
 }
-
 
 #tooltip2 {
     position:absolute;

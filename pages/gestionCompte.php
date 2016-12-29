@@ -49,9 +49,9 @@ if(isset($_POST['modifier'])||isset($_POST['maj']))
 	<div class="row ">
 		<div class="col-md-12">
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-4 col-sm-4 col-xs-3">
 				</div>
-				<div class="col-md-4 bord">
+				<div class="col-md-4 col-sm-4 col-xs-6 bord">
 					<h3>
 						Inscription
 					</h3>
@@ -90,7 +90,7 @@ if(isset($_POST['modifier'])||isset($_POST['maj']))
 					</form>
                                     <br/>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4 col-sm-4 col-xs-3">
 				</div>
 			</div>
 		</div>
@@ -132,9 +132,9 @@ else {
         ?>
         <div class="container-fluid ">
                 <div class="row ">
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-sm-4 col-xs-1">
                         </div>
-                        <div class="col-md-4 bord">
+                        <div class="col-md-4 col-sm-4 col-xs-8 bord">
                                 <h3>
                                         Vos informations
                                 </h3>
@@ -167,21 +167,21 @@ else {
 						</dd>
 					</dl>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-sm-4 col-xs-3">
                         </div>
                 </div>
                 <div class="row">
-				<div class="col-md-4">
+				<div class="col-md-4 col-sm-4 col-xs-3">
 				</div>
                                 <div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 col-sm-4 col-xs-6">
                                         <form id="modifier" name="modifier" method="post">
                                                             <button  type="submit" name="modifier" id="modifier" value="Modifier mes informations" class="btn btn-primary"">
                                                                     Modifier mes infos
                                                             </button>
                                                                 </form>
                                     </div>
-                                    <div class="col-md-2 ">
+                                    <div class="col-md-2 col-sm-4 col-xs-6">
                                         <form id="supprimer" name="supprimer" method="post">
                                                              <button type="submit" name="supprimer" id="supprimer" value="Supprimer mon compte" class="btn btn-warning">
                                                                     Supprimer mon compte
@@ -189,7 +189,7 @@ else {
                                                                 </form>
                                     </div>
                 ²               </div>
-				<div class="col-md-4">
+				<div class="col-md-4 col-sm-4 col-xs-3">
 				</div>
 			</div>
         </div>
