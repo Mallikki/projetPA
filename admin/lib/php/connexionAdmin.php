@@ -4,19 +4,7 @@ if(isset($_POST['submit_login'])){
     $retour = $log->isAuthorizedAdmin($_POST['login'], $_POST['mdp']);
     if(!$retour==0){
         $_SESSION['admin']=$retour;
-		?>
-		<div class="col-md-12">
-			<div class="alert alert-dismissable alert-success">
-				 
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-					×
-				</button>
-				<h4>
-				 Bravo!
-				</h4>Vous êtes bien connecté(e)! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
-			</div>
-		</div>
-		<?php
+		header('Location: ./index.php?page=accueil');    
     }
     else {
         ?>

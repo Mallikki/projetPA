@@ -8,7 +8,7 @@ $('document').ready(function(){
         $(this).append('<div id="tooltip"><div class="tipHeader"></div><div class="tipBody">' + tip + '</div><div class="tipFooter"></div></div>');    
  
         // Ajuster les coordonnées de l'infobulle
-        $('#tooltip').css('top', e.pageY -200 );
+        $('#tooltip').css('top', e.pageY -500 );
         $('#tooltip').css('left', e.pageX - 300 );
  
         // Faire apparaitre l'infobulle avec un effet fadeIn
@@ -18,7 +18,7 @@ $('document').ready(function(){
     }).mousemove(function(e) {
  
         // Ajuster la position de l'infobulle au déplacement de la souris
-        $('#tooltip').css('top', e.pageY -200 );
+        $('#tooltip').css('top', e.pageY -500 );
         $('#tooltip').css('left', e.pageX - 300 );
  
     }).mouseout(function() {

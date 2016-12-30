@@ -9,19 +9,7 @@ if(isset($_POST['submit_create'])){
         $retour2 = $log->create($_POST['nom'], $_POST['prenom'], $_POST['pseudo'], $_POST['email'], $_POST['mdp']);
         if($retour2!=0){
             $_SESSION['client']=$retour2;
-                    ?>
-                    <div class="col-md-12">
-                            <div class="alert alert-dismissable alert-success">
-
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                                            ×
-                                    </button>
-                                    <h4>
-                                     Bravo!
-                                    </h4>Votre compte a bien été créé! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
-                            </div>
-                    </div>
-                    <?php
+             print "<meta http-equiv=\"refresh\": Content=\"0;URL=./index.php?page=accueil\">";
         }
         else {
         ?>
@@ -76,28 +64,28 @@ else
 							<label for="nom">
 								Nom
 							</label>
-							<input type="text" id="nom" name="nom" class="form-control" />
+							<input type="text" id="nom" name="nom" class="form-control" placeholder="Ex: Dupont"/>
 						</div>
 						<div class="form-group">
 							 
 							<label for="prenom">
 								Prenom
 							</label>
-							<input ttype="text" id="prenom" name="prenom" class="form-control" />
+							<input ttype="text" id="prenom" name="prenom" class="form-control" placeholder="Ex: Albert" />
 						</div>
                                                 <div class="form-group">
 							 
 							<label for="pseudo">
 								Pseudo
 							</label>
-							<input type="text" id="pseudo" name="pseudo" class="form-control" />
+							<input type="text" id="pseudo" name="pseudo" class="form-control"  placeholder="Ex: Albert53"/>
 						</div>
                                                 <div class="form-group">
 							 
 							<label for="email">
 								Email
 							</label>
-							<input type="email" id="email" name="email" class="form-control" placeholder="aaa@aaa.aa" />
+							<input type="email" id="email" name="email" class="form-control" placeholder="Ex: albert.dupont@gmail.com" />
 						</div>
                                                 <div class="form-group">
 							 

@@ -16,9 +16,9 @@ if (isset($_GET['pdf']))
             <th class="titrepasgros">Salle</th>
             <th class="titrepasgros">Heure</th>
             <th class="titrecellpdf">Film</th>
-            <th class="titrepasgros">Enfant</th>
-            <th class="titrepasgros">Adulte</th>
-            <th class="titrepasgros">Etudiant</th>
+            <th class="titrepasgros">Enf</th>
+            <th class="titrepasgros">Adu</th>
+            <th class="titrepasgros">Etu</th>
             <th class="titrepasgros">Prix</th>
         </tr>
         <?php

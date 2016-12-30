@@ -26,10 +26,6 @@
                                         <li class="ongletSec">
 						<a href="./index.php?page=infos">infos Pratiques</a>
 					</li>
-                                        
-                                        <li class="ongletSec">
-						<a href="./index.php?page=test">Tests</a>
-					</li>
 				</ul>
 			</div>
 		</div>

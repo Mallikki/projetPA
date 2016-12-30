@@ -45,13 +45,14 @@ session_start();
             </div>
         </header>
         <div class="container">
+            
             <div class="col-sm-12 col-lg-12 col-xs-3">
                 <?php 
                 if (isset($_SESSION['client']))
                 {
                 $cli=new ClientDB($cnx);
                 $pseudo=$cli->read($_SESSION['client']);
-                print "<span class=\"blanc\">Bienvenue, </span><a href=\"./index.php?page=MesReservations\">" .$pseudo[0]->pseudo. "</a>";
+                print "<span class=\"blanc\">Bienvenue, </span><a href=\"./index.php?page=MesReservations\">" .$pseudo[0]->pseudo. "</a><br><br>";
                 }
             ?>
             </div>

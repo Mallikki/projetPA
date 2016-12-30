@@ -1,6 +1,7 @@
 <?php
 //traitement php formulaire
 if(isset($_GET['reserver'])){
+        unset($_GET['reserver']);
         $res=new ReservationDB($cnx);
         $reservation=$res->RechRes($_GET['id_seance'], $_SESSION['client']);
         if ($reservation==0)
@@ -71,23 +72,8 @@ if(isset($_GET['reserver'])){
                 <?php
         }
 }
-
-if(!isset($_GET['id_seance'])){
-    ?>
-    <div class="col-md-12">
-			<div class="alert alert-dismissable alert-danger">
-				 
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-					×
-				</button>
-				<h4>
-					Mais...
-                                    </h4> Vous n'avez choisi aucun film! <a href="./index.php?page=accueil" class="alert-link">Retour à l'accueil</a>
-			</div>
-		</div>
-<?php }
-
-else {
+else if (!isset($_GET['reserver']))
+{
 $info = new SeanceDB($cnx);
 $texte=$info->Read($_GET['id_seance']);
 $film = new FilmDB($cnx);
@@ -109,21 +95,21 @@ $flim=$film->getFilmID($texte[0]->id_film);
 							<label>
 								Enfants
 							</label>
-							<input type="text" id="enfant" name="enfant"  class="form-control" />
+							<input type="text" id="enfant" name="enfant"  class="form-control" placeholder="Nombre entre 0 et 20" />
 						</div>
 						<div class="form-group">
 							 
 							<label>
 								Adultes
 							</label>
-							<input type="text" id="adulte" name="adulte" class="form-control" />
+							<input type="text" id="adulte" name="adulte" class="form-control" placeholder="Nombre entre 0 et 20" />
 						</div>
                                                 <div class="form-group">
 							 
 							<label>
 								Etudiants
 							</label>
-							<input type="text" id="etudiant" name="etudiant" class="form-control" />
+							<input type="text" id="etudiant" name="etudiant" class="form-control" placeholder="Nombre entre 0 et 20"/>
 						</div>
                                                 <input type="hidden" name="id_seance" value="<?php print $_GET['id_seance'];?>"/>
 						<input class="btn btn-primary" type="submit" name="reserver" id="reserver" value="Réserver mes places"/>
