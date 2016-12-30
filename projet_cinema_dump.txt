@@ -1,0 +1,1055 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.2.7
+-- Dumped by pg_dump version 9.3.5
+-- Started on 2016-12-30 18:29:35
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'LATIN9';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+DROP DATABASE olivia_tournois_progavanc;
+--
+-- TOC entry 2600 (class 1262 OID 1892025)
+-- Name: olivia_tournois_progavanc; Type: DATABASE; Schema: -; Owner: olivia.tournois
+--
+
+CREATE DATABASE olivia_tournois_progavanc WITH TEMPLATE = template0 ENCODING = 'LATIN9' LC_COLLATE = 'fr_FR@euro' LC_CTYPE = 'fr_FR@euro';
+
+
+ALTER DATABASE olivia_tournois_progavanc OWNER TO "olivia.tournois";
+
+\connect olivia_tournois_progavanc
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'LATIN9';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+--
+-- TOC entry 5 (class 2615 OID 2200)
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA public;
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- TOC entry 2601 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
+--
+-- TOC entry 178 (class 3079 OID 12328)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2603 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- TOC entry 194 (class 1255 OID 1897894)
+-- Name: CALCUL_PLACES(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION "CALCUL_PLACES"(enfant integer, adulte integer, etudiant integer) RETURNS integer
+    LANGUAGE plpgsql STRICT
+    AS $$BEGIN
+	RETURN enfant+adulte+etudiant;
+END$$;
+
+
+ALTER FUNCTION public."CALCUL_PLACES"(enfant integer, adulte integer, etudiant integer) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 198 (class 1255 OID 1897990)
+-- Name: CALCUL_PRIX(integer, integer, integer); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION "CALCUL_PRIX"(a integer, b integer, c integer) RETURNS numeric
+    LANGUAGE plpgsql STRICT
+    AS $$
+DECLARE
+PRIXENF numeric;
+PRIXADU numeric;
+PRIXED numeric;
+PRIXTOTENF numeric;
+PRIXTOTADU numeric;
+PRIXTOTED numeric;
+BEGIN
+	SELECT INTO PRIXENF PRIX FROM PRIX WHERE nom_cat='enfant';
+	SELECT INTO PRIXADU PRIX FROM PRIX WHERE nom_cat='adulte';
+	SELECT INTO PRIXED PRIX FROM PRIX WHERE nom_cat='etudiant';
+	PRIXTOTENF=PRIXENF*a;
+	PRIXTOTADU=PRIXADU*b;
+	PRIXTOTED=PRIXED*c;
+	RETURN PRIXTOTENF+PRIXTOTADU+PRIXTOTED;
+END$$;
+
+
+ALTER FUNCTION public."CALCUL_PRIX"(a integer, b integer, c integer) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 193 (class 1255 OID 1897899)
+-- Name: CALCUL_PRIX(numeric, numeric, numeric); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION "CALCUL_PRIX"(p1 numeric, p2 numeric, p3 numeric) RETURNS numeric
+    LANGUAGE plpgsql STRICT
+    AS $$BEGIN
+	RETURN p1+p2+p3;
+END$$;
+
+
+ALTER FUNCTION public."CALCUL_PRIX"(p1 numeric, p2 numeric, p3 numeric) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 192 (class 1255 OID 1933355)
+-- Name: creacli(text, text, text, text, text); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION creacli(text, text, text, text, text) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+declare f_pseudo alias for $1;
+	declare f_mdp alias for $2;
+	declare f_nom alias for $3;
+	declare f_prenom alias for $4;
+	declare f_email alias for $5;
+	declare id integer;
+	declare retour integer;
+begin
+	insert into client (pseudo,mdp,nom,prenom,email,statut) values (f_pseudo,f_mdp,f_nom,f_prenom,f_email,0);
+	select into id id_client from client where pseudo=f_pseudo and mdp=f_mdp;
+	if not found
+	then
+	  retour=0;
+	else
+	  retour=id;
+	end if;
+	return retour;
+end;
+$_$;
+
+
+ALTER FUNCTION public.creacli(text, text, text, text, text) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 203 (class 1255 OID 1934311)
+-- Name: creares(text, text, text, text, text); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION creares(text, text, text, text, text) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+declare f_adulte alias for $1;
+	declare f_enfant alias for $2;
+	declare f_etudiant alias for $3;
+	declare f_seance alias for $4;
+	declare f_client alias for $5;
+	declare id integer;
+	declare retour integer;
+	declare et integer;
+	declare ad integer;
+	declare enf integer;
+	declare cli integer;
+	declare se integer;
+	declare nplace integer;
+	
+begin
+	et=cast(f_etudiant as integer);
+	ad=cast(f_adulte as integer);
+	enf=cast(f_enfant as integer);
+	cli=cast(f_client as integer);
+	se=cast(f_seance as integer);
+	if (et <> 0 and ad <> 0 and enf <>0) then
+		insert into reservation (id_seance,id_client,prix_total,enfant,etudiant,adulte,nbre_places)
+		values (se,cli,(select * from "CALCUL_PRIX"(enf,ad,et)),enf,et,ad, (select * from "CALCUL_PLACES"(enf,et,ad)));
+		update seance set nbre_places_dispo=nbre_places_dispo-(select * from "CALCUL_PLACES"(enf,et,ad)) where id_seance=se;
+		select into id num_res from reservation where id_client=cli and id_seance=se;
+		select into nplace nbre_places_dispo from seance where id_seance=se;
+		if (nplace > 0) then
+
+			if id is null
+			then
+			  retour=0;
+			else
+			  retour=id;
+			end if;
+		else
+			retour=0;
+			end if;
+		
+		return retour;
+	else 
+		retour =-1;
+	end if;
+	return retour;
+		
+end;
+$_$;
+
+
+ALTER FUNCTION public.creares(text, text, text, text, text) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 207 (class 1255 OID 1945504)
+-- Name: creaseance(text, text, text, date); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION creaseance(text, text, text, date) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+declare f_film alias for $1;
+	declare f_salle alias for $2;
+	declare f_heure alias for $3;
+	declare f_date alias for $4;
+	declare idfilm integer;
+	declare salle integer;
+	declare place integer;
+	declare id integer;
+	declare retour integer;
+begin
+	idfilm=cast(f_film as integer);
+	salle=cast(f_salle as integer);
+	if (salle = 1 or salle=2) then
+	place=200;
+	else
+	place=300;
+	end if;
+	
+	insert into seance (num_salle,heure,id_film,dat,nbre_places_dispo) values (salle,f_heure,idfilm,f_date,place);
+	select into id id_seance from seance where id_film=idfilm and dat=f_date and heure=f_heure;
+	if not found
+	then
+	  retour=0;
+	else
+	  retour=id;
+	end if;
+	return retour;
+end;
+$_$;
+
+
+ALTER FUNCTION public.creaseance(text, text, text, date) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 200 (class 1255 OID 1933789)
+-- Name: delete_client(integer); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION delete_client(integer) RETURNS void
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+ f_id alias for $1;
+ places integer;
+BEGIN
+select into places nbre_places from seance where ID_CLIENT=CAST(f_id as integer);
+UPDATE SEANCE set nbre_places_dispo=nbre_places_dispo+nbre_places;
+DELETE FROM RESERVATION WHERE ID_CLIENT=CAST(f_id as integer);
+DELETE FROM CLIENT WHERE ID_CLIENT=CAST(f_id as integer);
+END;
+$_$;
+
+
+ALTER FUNCTION public.delete_client(integer) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 205 (class 1255 OID 1936221)
+-- Name: delete_res(integer); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION delete_res(integer) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+ f_idRes alias for $1;
+ places integer;
+ seancei integer;
+ idres integer;
+BEGIN
+select into places nbre_places from reservation where num_res=CAST(f_idRes as integer);
+select into seancei id_seance from reservation where num_res=CAST(f_idRes as integer);
+UPDATE SEANCE set nbre_places_dispo=nbre_places_dispo+places where id_seance=seancei;
+DELETE FROM RESERVATION WHERE num_res=CAST(f_idRes as integer);
+select into idres num_res from reservation where num_res=CAST(f_idRes as integer);
+if (idres is null) then
+
+ return 1;
+
+else 
+return 0;
+end if;
+END;
+$_$;
+
+
+ALTER FUNCTION public.delete_res(integer) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 196 (class 1255 OID 1933419)
+-- Name: deletecli(text); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION deletecli(text) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+declare f_id alias for $1;
+begin
+	delete from reservation where id_client=cast(f_id as integer);
+	delete from client where id_client=cast(f_id as integer);
+	return 1;
+end;
+$_$;
+
+
+ALTER FUNCTION public.deletecli(text) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 202 (class 1255 OID 1936298)
+-- Name: majres(text, text, text, text, text); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION majres(text, text, text, text, text) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+declare f_adulte alias for $1;
+	declare f_enfant alias for $2;
+	declare f_etudiant alias for $3;
+	declare f_res alias for $4;
+	declare f_cli alias for $5;
+	declare id integer;
+	declare retour integer;
+	declare et integer;
+	declare ad integer;
+	declare enf integer;
+	declare res integer;
+	declare se integer;
+	declare cli integer;
+	declare nplace integer;
+
+	declare placeavant integer;
+	declare placapres integer;
+	declare placetotal integer;
+	
+begin
+	et=cast(f_etudiant as integer);
+	ad=cast(f_adulte as integer);
+	enf=cast(f_enfant as integer);
+	res=cast(f_res as integer);
+	cli=cast(f_cli as integer);
+	if (et <> 0 and ad <> 0 and enf <> 0) then
+		select into placeavant nbre_places from reservation where num_res=res;
+		update reservation set enfant=enf,etudiant=et,adulte=ad,prix_total=(select * from "CALCUL_PRIX"(enf,ad,et)),nbre_places=(select * from "CALCUL_PLACES"(enf,et,ad)) where num_res=res;
+		placapres= (select * from "CALCUL_PLACES"(enf,et,ad));
+		select into se id_seance from seance where id_seance in (select id_seance from reservation where num_res=res);
+		update seance set nbre_places_dispo=nbre_places_dispo+placeavant where id_seance=se;
+		update seance set nbre_places_dispo=nbre_places_dispo-placapres where id_seance=se;
+		select into id num_res from reservation where id_client=cli and id_seance=se;
+		select into nplace nbre_places_dispo from seance where id_seance=se;
+		if (nplace > 0) then
+			if id is null
+			then
+			  retour=0;
+			else
+			  retour=id;
+			end if;
+		else
+			retour=0;
+		end if;
+	else
+		retour = -1;
+	end if;
+	return retour;
+end;
+$_$;
+
+
+ALTER FUNCTION public.majres(text, text, text, text, text) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 191 (class 1255 OID 1933309)
+-- Name: okco(text, text); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION okco(text, text) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+declare f_login alias for $1;
+	declare f_password alias for $2;
+	declare id integer;
+	declare retour integer;
+begin
+	select into id id_client from client where pseudo=f_login and mdp=f_password;
+	if not found
+	then
+	  retour=0;
+	else
+	  retour=id;
+	end if;
+	return retour;
+end;
+$_$;
+
+
+ALTER FUNCTION public.okco(text, text) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 199 (class 1255 OID 1934091)
+-- Name: okcoadmin(text, text); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION okcoadmin(text, text) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+declare f_login alias for $1;
+	declare f_password alias for $2;
+	declare id integer;
+	declare retour integer;
+begin
+	select into id id_client from client where pseudo=f_login and mdp=f_password and statut=1;
+	if not found
+	then
+	  retour=0;
+	else
+	  retour=id;
+	end if;
+	return retour;
+end;
+$_$;
+
+
+ALTER FUNCTION public.okcoadmin(text, text) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 204 (class 1255 OID 1934339)
+-- Name: rechcli(text, text); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION rechcli(text, text) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+	declare f_pseudo alias for $1;
+	declare f_mdp alias for $2;
+	declare id integer;
+	declare retour integer;
+begin
+	select into id id_client from client where pseudo=f_pseudo and mdp=f_mdp;
+	if not found
+	then
+	  retour=0;
+	else
+	  retour=id;
+	end if;
+	return retour;
+end;
+$_$;
+
+
+ALTER FUNCTION public.rechcli(text, text) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 206 (class 1255 OID 1945416)
+-- Name: rechseance(text); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION rechseance(text) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+	declare f_id alias for $1;
+	declare id integer;
+	declare retour integer;
+begin
+	select into id id_seance from reservation where id_seance=CAST(f_id as integer);
+	if not found
+	then
+	  retour=0;
+	else
+	  retour=1;
+	end if;
+	return retour;
+end;
+$_$;
+
+
+ALTER FUNCTION public.rechseance(text) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 201 (class 1255 OID 1934330)
+-- Name: rechsires(text, text); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION rechsires(text, text) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+	declare f_seance alias for $1;
+	declare f_client alias for $2;
+	declare cli integer;
+	declare se integer;
+	declare id integer;
+	declare retour integer;
+begin
+	cli=cast(f_client as integer);
+	se=cast(f_seance as integer);
+	select into id num_res from reservation where id_client=cli and id_seance=se;
+	if not found
+	then
+	  retour=0;
+	else
+	  retour=id;
+	end if;
+	return retour;
+end;
+$_$;
+
+
+ALTER FUNCTION public.rechsires(text, text) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 197 (class 1255 OID 1933414)
+-- Name: updatecli(text, text, text, text, text); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION updatecli(text, text, text, text, text) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+declare f_pseudo alias for $1;
+	declare f_nom alias for $2;
+	declare f_prenom alias for $3;
+	declare f_email alias for $4;
+	declare f_id alias for $5;
+	declare id integer;
+	declare retour integer;
+begin
+	update client set pseudo=f_pseudo, nom=f_nom,prenom=f_prenom,email=f_email where id_client= CAST(f_id as integer);
+	select into id id_client from client where pseudo=f_pseudo;
+	if not found
+	then
+	  retour=0;
+	else
+	  retour=1;
+	end if;
+	return retour;
+end;
+$_$;
+
+
+ALTER FUNCTION public.updatecli(text, text, text, text, text) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 195 (class 1255 OID 1898022)
+-- Name: verifier_connexion(text, text); Type: FUNCTION; Schema: public; Owner: olivia.tournois
+--
+
+CREATE FUNCTION verifier_connexion(text, text) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+declare f_login alias for $1;
+	declare f_password alias for $2;
+	declare id integer;
+	declare retour integer;
+begin
+	select into id id_gt_admin from gt_admin where login=f_login and password=f_password;
+	if not found
+	then
+	  retour=0;
+	else
+	  retour=1;
+	end if;
+	return retour;
+end;
+$_$;
+
+
+ALTER FUNCTION public.verifier_connexion(text, text) OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 171 (class 1259 OID 1897807)
+-- Name: client_numseq; Type: SEQUENCE; Schema: public; Owner: olivia.tournois
+--
+
+CREATE SEQUENCE client_numseq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.client_numseq OWNER TO "olivia.tournois";
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 170 (class 1259 OID 1897802)
+-- Name: client; Type: TABLE; Schema: public; Owner: olivia.tournois; Tablespace: 
+--
+
+CREATE TABLE client (
+    id_client integer DEFAULT nextval('client_numseq'::regclass) NOT NULL,
+    pseudo character varying(80) NOT NULL,
+    mdp character varying(80) NOT NULL,
+    nom character varying(80) NOT NULL,
+    prenom character varying(80) NOT NULL,
+    email character varying(80) NOT NULL,
+    statut integer,
+    CONSTRAINT email_check CHECK (((email)::text ~* '^[A-Za-z0-9._ -]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'::text)),
+    CONSTRAINT nom_check CHECK (((nom)::text ~* '^[A-Z][A-Za-z -]{1,30}'::text)),
+    CONSTRAINT prnom_check CHECK (((prenom)::text ~* '^[A-Z][A-Za-z -]{1,30}'::text)),
+    CONSTRAINT pseudo_check CHECK (((pseudo)::text ~* '^[A-Z][A-Za-z0-9 ]{1,30}'::text))
+);
+
+
+ALTER TABLE public.client OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 175 (class 1259 OID 1897825)
+-- Name: film_numseq; Type: SEQUENCE; Schema: public; Owner: olivia.tournois
+--
+
+CREATE SEQUENCE film_numseq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.film_numseq OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 174 (class 1259 OID 1897820)
+-- Name: film; Type: TABLE; Schema: public; Owner: olivia.tournois; Tablespace: 
+--
+
+CREATE TABLE film (
+    id_film integer DEFAULT nextval('film_numseq'::regclass) NOT NULL,
+    titre character varying(80) NOT NULL,
+    realisateur character varying(80) NOT NULL,
+    note double precision NOT NULL,
+    resume character varying(500) NOT NULL,
+    sortie character varying(4) NOT NULL,
+    affiche character varying(80) NOT NULL
+);
+
+
+ALTER TABLE public.film OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 176 (class 1259 OID 1897831)
+-- Name: prix; Type: TABLE; Schema: public; Owner: olivia.tournois; Tablespace: 
+--
+
+CREATE TABLE prix (
+    nom_cat character varying(80) NOT NULL,
+    prix numeric NOT NULL
+);
+
+
+ALTER TABLE public.prix OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 169 (class 1259 OID 1897796)
+-- Name: reservation_numseq; Type: SEQUENCE; Schema: public; Owner: olivia.tournois
+--
+
+CREATE SEQUENCE reservation_numseq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.reservation_numseq OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 168 (class 1259 OID 1897791)
+-- Name: reservation; Type: TABLE; Schema: public; Owner: olivia.tournois; Tablespace: 
+--
+
+CREATE TABLE reservation (
+    num_res integer DEFAULT nextval('reservation_numseq'::regclass) NOT NULL,
+    id_seance integer NOT NULL,
+    id_client integer NOT NULL,
+    prix_total numeric NOT NULL,
+    enfant integer NOT NULL,
+    etudiant integer NOT NULL,
+    adulte integer NOT NULL,
+    nbre_places integer NOT NULL,
+    CONSTRAINT adulte_check CHECK (((adulte >= 0) AND (adulte <= 20))),
+    CONSTRAINT enfant_check CHECK (((enfant >= 0) AND (enfant <= 20))),
+    CONSTRAINT etudiant_check CHECK (((etudiant >= 0) AND (etudiant <= 20)))
+);
+
+
+ALTER TABLE public.reservation OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 173 (class 1259 OID 1897818)
+-- Name: seance_numseq; Type: SEQUENCE; Schema: public; Owner: olivia.tournois
+--
+
+CREATE SEQUENCE seance_numseq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.seance_numseq OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 172 (class 1259 OID 1897809)
+-- Name: seance; Type: TABLE; Schema: public; Owner: olivia.tournois; Tablespace: 
+--
+
+CREATE TABLE seance (
+    id_seance integer DEFAULT nextval('seance_numseq'::regclass) NOT NULL,
+    num_salle integer NOT NULL,
+    heure character varying(80) NOT NULL,
+    id_film integer NOT NULL,
+    dat date NOT NULL,
+    nbre_places_dispo integer NOT NULL,
+    CONSTRAINT heure_check CHECK (((heure)::text ~* '^[0-2]{1}[0-9]{1}:[0-5]{1}[0-9]{1}'::text)),
+    CONSTRAINT salle_check CHECK (((num_salle >= 1) AND (num_salle <= 3)))
+);
+
+
+ALTER TABLE public.seance OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 177 (class 1259 OID 1933477)
+-- Name: reserv; Type: VIEW; Schema: public; Owner: olivia.tournois
+--
+
+CREATE VIEW reserv AS
+SELECT r.id_client, r.num_res, r.prix_total, r.enfant, r.etudiant, r.adulte, r.nbre_places, f.titre, s.dat, s.heure, s.num_salle FROM reservation r, film f, seance s WHERE ((r.id_seance = s.id_seance) AND (s.id_film = f.id_film));
+
+
+ALTER TABLE public.reserv OWNER TO "olivia.tournois";
+
+--
+-- TOC entry 2589 (class 0 OID 1897802)
+-- Dependencies: 170
+-- Data for Name: client; Type: TABLE DATA; Schema: public; Owner: olivia.tournois
+--
+
+INSERT INTO client (id_client, pseudo, mdp, nom, prenom, email, statut) VALUES (9, 'Coco', 'aa36dc6e81e2ac7ad03e12fedcb6a2c0', 'Tenret', 'Corentin', 'corentin@live.be', 0);
+INSERT INTO client (id_client, pseudo, mdp, nom, prenom, email, statut) VALUES (17, 'Adou', '5c3bea5d394835b2af9d2cfd632147f8', 'Saddouk', 'Adil', 'Adil@adil.be', 0);
+INSERT INTO client (id_client, pseudo, mdp, nom, prenom, email, statut) VALUES (21, 'Oli25', '098f6bcd4621d373cade4e832627b4f6', 'Olivia', 'Tournois', 'tttesst@test.com', 0);
+INSERT INTO client (id_client, pseudo, mdp, nom, prenom, email, statut) VALUES (16, 'Mallikki', '1bfc2af2159a8321da9c9aea0d7ad61a', 'Tournois', 'Olivia', 'o.tournois@gmail.com', 1);
+INSERT INTO client (id_client, pseudo, mdp, nom, prenom, email, statut) VALUES (24, 'Xiroco', '48963fe6fec63a05067f9f1dfd233f34', 'Tenret', 'Corentin', 'ciroco@live.be', 0);
+INSERT INTO client (id_client, pseudo, mdp, nom, prenom, email, statut) VALUES (25, 'DupAlb', '0e9f1e8e40bb79e800b0cc9433830cf4', 'Dupont', 'Albert', 'dupalb@gmail.com', 0);
+INSERT INTO client (id_client, pseudo, mdp, nom, prenom, email, statut) VALUES (30, 'Test', '098f6bcd4621d373cade4e832627b4f6', 'Test', 'Test', 'Test@test.be', 0);
+
+
+--
+-- TOC entry 2604 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: client_numseq; Type: SEQUENCE SET; Schema: public; Owner: olivia.tournois
+--
+
+SELECT pg_catalog.setval('client_numseq', 30, true);
+
+
+--
+-- TOC entry 2593 (class 0 OID 1897820)
+-- Dependencies: 174
+-- Data for Name: film; Type: TABLE DATA; Schema: public; Owner: olivia.tournois
+--
+
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (2, 'Fight Club', 'David Fincher', 8.80000000000000071, 'Le narrateur, sans identité précise, vit seul, travaille seul, dort seul, mange seul ses plateaux-repas pour une personne comme beaucoup d''autres personnes seules qui connaissent la misère humaine, morale et sexuelle. C''est pourquoi il va devenir membre du Fight club, un lieu clandestin où il va pouvoir retrouver sa virilité, l''échange et la communication.', '1999', 'fightclub.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (3, 'L''Empire contre-attaque', 'George Lucas', 8.69999999999999929, 'Malgré la destruction de l''Etoile Noire, l''Empire maintient son emprise sur la galaxie, et poursuit sans relâche sa lutte contre l''Alliance rebelle. Basés sur la planète glacée de Hoth, les rebelles essuient un assaut des troupes impériales. Parvenus à s''échapper, la princesse Leia, Han Solo, Chewbacca et C-3P0 se dirigent vers Bespin, la cité des nuages gouvernée par Lando Calrissian, ancien compagnon de Han', '1980', 'empirecontreattaque.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (4, 'Le Seigneur des Anneaux - Les Deux Tours', 'Peter Jackson', 8.69999999999999929, 'Après la mort de Boromir et la disparition de Gandalf, la Communauté s''est scindée en trois. Perdus dans les collines d''Emyn Muil, Frodon et Sam découvrent qu''ils sont suivis par Gollum, une créature versatile corrompue par l''Anneau. Celui-ci promet de conduire les Hobbits jusqu''à la Porte Noire du Mordor.', '2002', 'lesdeuxtours.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (5, 'Lawrence d''Arabie', 'David Lean', 8.30000000000000071, 'En 1916, le jeune officier britannique T. E. Lawrence est chargé d''enquêter sur les révoltes arabes contre l''occupant turc. Celui qu''on appellera plus tard "Lawrence d''Arabie" se range alors du côté des insurgés et, dans les dunes éternelles du désert, organise une guérilla. Personnage brillant mais controversé, il va mener des batailles aux côtés de ses alliés et changer la face d''un empire.', '1962', 'Lawrence-d-Arabie.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (6, 'Eternal Sunshine of the Spotless Mind', 'Michel Gondry', 8.30000000000000071, 'Joel et Clementine ne voient plus que les mauvais côtés de leur tumultueuse histoire d''amour, au point que celle-ci fait effacer de sa mémoire toute trace de cette relation. Effondré, Joel contacte l''inventeur du procédé Lacuna, le Dr. Mierzwiak, pour qu''il extirpe également de sa mémoire tout ce qui le rattachait à Clementine.', '2004', 'eternal-sunshine.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (7, 'Full Metal Jacket', 'Stanley Kubrick', 8.30000000000000071, 'Pendant la guerre du Vietnam, la préparation et l''entrainement d''un groupe de jeunes marines, jusqu''au terrible baptême du feu et la sanglante offensive du Tet a Hue, en 1968.', '1987', 'Full_Metal_Jacket.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (8, 'Amadeus', 'Milos Forman', 8.30000000000000071, 'A Vienne, en novembre 1823. Au coeur de la nuit, un vieil homme égaré clame cette étonnante confession : "Pardonne, Mozart, pardonne à ton assassin !" Ce fantôme, c''est Antonio Salieri, jadis musicien réputé et compositeur officiel de la Cour.', '1984', 'amadeus.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (9, 'Snatch : Tu braques ou tu raques!', 'Guy Ritchie', 8.30000000000000071, 'Franky vient de voler un énorme diamant qu''il doit livrer à Avi, un mafieux new-yorkais. En chemin, il fait escale à Londres où il se laisse convaincre par Boris de parier sur un combat de boxe clandestin. Il ignore, bien sûr, qu''il s''agit d''un coup monté avec Vinny et Sol, afin de le délester de son magnifique caillou.', '2000', 'snatch.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (10, 'Rebecca', 'Alfred Hitchcock', 8.09999999999999964, 'C''est à Monte-Carlo que le richissime et séduisant veuf Maxim de Winter croise le chemin d''une jeune domestique qu''il ne tarde pas à séduire. Bientôt, ils se marient et retournent habiter dans le manoir de Manderley, demeure familiale de Winter, au sud de l''Angleterre. Très rapidement, dans cet endroit lugubre et froid, la nouvelle Mme. de Winter se confronte aux domestiques qui ne semblent guère l''apprécier.', '1940', 'rebecca.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (11, 'Et pour quelques dollars de plus', 'Sergio Leone', 8.30000000000000071, '"L''indien", bandit cruel et fou, s''est évadé de prison. Il se prépare à attaquer la banque d''El Paso, la mieux gardée de tout l''Ouest, avec une quinzaine d''autres malfaiteurs. Le " Manchot " et le Colonel Douglas Mortimer, deux chasseurs de primes concurrents, décident, après une confrontation tendue, de faire finalement équipe pour arrêter les bandits. Mais leurs motivations ne sont pas forcément les mêmes...', '1965', 'et-pour-quelques-dollars-de-plus.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (12, 'La garçonnière', 'Billy Wilder', 8.30000000000000071, 'C.C. Baxter est employé à la Sauvegarde, grande compagnie d''assurance. Dans l''espoir d''un avancement il prête souvent son appartement à ses supérieurs qui y emmènent leurs petites amies. Un jour le chef du personnel le convoque et lui apprend qu''il sait tout et lui demande aussi sa clé. Baxter est enfin promu. Mais ce qu''il ignorait c''est que le chef du personnel emmenait dans son appartement la femme dont il était amoureux.', '1960', 'garconniere.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (13, 'Inglourious Basterds', 'Quentin Tarantino', 8.30000000000000071, 'Dans la France occupée de 1940, Shosanna Dreyfus assiste à l''exécution de sa famille tombée entre les mains du colonel nazi Hans Landa. Shosanna s''échappe de justesse et s''enfuit à Paris où elle se construit une nouvelle identité en devenant exploitante d''une salle de cinéma.', '2009', 'inglourious-basterds.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (14, 'Le trésor de la Sierra Madre', 'John Huston', 8.30000000000000071, 'Dobbs et Curtis travaillent sur un chantier dont le chef part avec le salaire des ouvriers. Ils partent à sa recherche et récupèrent leur argent. Puis ils s''associent avec le vieil Howard pour exploiter un filon d''or dans la Sierra Madre.', '1948', 'tresordelasierramadre.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (15, 'Le garde du corps', 'Akira Kurosawa', 8.30000000000000071, 'Japon, XIXe siècle. Un samouraï errant fait étape dans un village terrorisé par deux clans rivaux. En se ralliant successivement à l''un et à l''autre, il va précipiter leur chute et sauver les villageois de leur joug.', '1961', 'le-garde-du-corps.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (16, 'Raging Bull', 'Martin Scorsese', 8.30000000000000071, 'Raging Bull retrace les moments forts de la carrière flamboyante de Jack La Motta, champion de boxe poids moyen. Issu d''un milieu modeste, il fut le héros de combats mythiques, notamment contre Robinson et Cerdan. Autodestructeur, paranoïque, déchiré entre le désir du salut personnel et la damnation, il termine son existence, bouffi, en tant que gérant de boîte de nuit et entertainer. Quand l''ascension et le déclin d''une vie deviennent épopée...', '1980', 'raging-bull.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (17, '2001, l''Odyssée de l''espace', 'Stanley Kubrick', 8.30000000000000071, 'A l''aube de l''Humanité, dans le désert africain, une tribu de primates subit les assauts répétés d''une bande rivale, qui lui dispute un point d''eau. La découverte d''un monolithe noir inspire au chef des singes assiégés un geste inédit et décisif. Brandissant un os, il passe à l''attaque et massacre ses adversaires. Le premier instrument est né.
+En 2001, quatre millions d''années plus tard, un vaisseau spatial évolue en orbite lunaire au rythme langoureux du "Beau Danube Bleu"', '1968', '2001espacejpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (138, 'Les Lumières de la Ville', 'Charlie Chaplin', 8.5, 'Charlot vagabond vient en aide à une jeune fleuriste aveugle et se fait passer pour un homme riche. A force de travail il réunit assez d''argent pour que la jeune fille recouvre la vue.', '1931', 'les_lumieres_de_la_ville.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (18, 'Will Hunting', 'Gus Van Sant', 8.09999999999999964, 'Will Hunting est un authentique génie mais également un rebelle aux élans imprévisibles. Il est né dans le quartier populaire de South Boston et a arrêté très tôt ses études, refusant le brillant avenir que pouvait lui procurer son intelligence. Il vit désormais entouré d''une bande de copains et passe son temps dans les bars a chercher la bagarre et à commettre quelques petits délits qui risquent bien de l''envoyer en prison.', '1997', 'Will_Hunting.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (19, 'Gran Torino', 'Clint Eastwood', 8.09999999999999964, 'Walt Kowalski est un ancien de la guerre de Corée, un homme inflexible, amer et pétri de préjugés surannés. Après des années de travail à la chaîne, il vit replié sur lui-même, occupant ses journées à bricoler, traînasser et siroter des bières. Avant de mourir, sa femme exprima le voeu qu''il aille à confesse, mais Walt n''a rien à avouer, ni personne à qui parler. Hormis sa chienne Daisy, il ne fait confiance qu''à son M-1, toujours propre, toujours prêt à l''usage...', '2008', 'grantorino.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (20, 'La grande évasion', 'John Sturges', 8.09999999999999964, 'Durant la Seconde Guerre Mondiale, des officiers alliés récidivistes de l''évasion sont prisonniers et surveillés étroitement dans un stalag. Malgré cela, ils préparent une évasion massive. Avant même que l''alerte ne soit déclenchée, soixante-quinze d''entre eux parviennent à s''échapper...', '1963', 'grande-evasion.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (21, 'Le Parrain - 2e partie', 'F.F. Coppola', 9, 'Depuis la mort de Don Vito Corleone, son fils Michael règne sur la famille. Amené à négocier avec la mafia juive, il perd alors le soutien d''un de ses lieutenants, Frankie Pentageli. Echappant de justesse à un attentat, Michael tente de retrouver le coupable, soupçonnant Hyman Roth, le chef de la mafia juive.', '1974', 'Le_Parrain_2e_Partie.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (22, 'Batman - The Dark Knight', 'Christopher Nolan', 8.90000000000000036, 'Dans ce nouveau volet, Batman augmente les mises dans sa guerre contre le crime. Avec l''appui du lieutenant de police Jim Gordon et du procureur de Gotham, Harvey Dent, Batman vise à éradiquer le crime organisé qui pullule dans la ville. Leur association est très efficace mais elle sera bientôt bouleversée par le chaos déclenché par un criminel extraordinaire que les citoyens de Gotham connaissent sous le nom de Joker.', '2008', 'The-Dark-Knight.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (23, 'Il faut sauver le soldat Ryan', 'Steven Spielberg', 8.5, 'Alors que les forces alliées débarquent à Omaha Beach, Miller doit conduire son escouade derrière les lignes ennemies pour une mission particulièrement dangereuse : trouver et ramener sain et sauf le simple soldat James Ryan, dont les trois frères sont morts au combat en l''espace de trois jours. Pendant que l''escouade progresse en territoire ennemi, les hommes de Miller se posent des questions. Faut-il risquer la vie de huit hommes pour en sauver un seul ?', '1998', 'ilfautsauver.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (24, 'Le Prestige', 'Christopher Nolan', 8.5, 'Londres, au début du siècle dernier...
+Robert Angier et Alfred Borden sont deux magiciens surdoués, promis dès leur plus jeune âge à un glorieux avenir. Une compétition amicale les oppose d''abord l''un à l''autre, mais l''émulation tourne vite à la jalousie, puis à la haine. Devenus de farouches ennemis, les deux rivaux vont s''efforcer de se détruire l''un l''autre en usant des plus noirs secrets de leur art. Cette obsession aura pour leur entourage des conséquences dramatiques...', '2006', 'Le_Prestige.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (25, 'The Big Lebowski', 'Frères Cohen', 8.09999999999999964, 'Jeff Lebowski, prénommé le Duc, est un paresseux qui passe son temps à boire des coups avec son copain Walter et à jouer au bowling, jeu dont il est fanatique. Un jour deux malfrats le passent à tabac. Il semblerait qu''un certain Jackie Treehorn veuille récupérer une somme d''argent que lui doit la femme de Jeff. Seulement Lebowski n''est pas marié. C''est une méprise, le Lebowski recherché est un millionnaire de Pasadena.', '1998', 'TheBigLebowski.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (26, 'Hot Fuzz', 'Edgar Wright', 7.90000000000000036, 'À Londres, le policier Nicholas Angel est le meilleur de son équipe, aussi à l''aise dans la résolution d''affaires que dans l''action, à tel point qu''il fait passer ses collègues pour de simples gardiens de la paix totalement incompétents. Afin de faire cesser cette comparaison qui désavantage le reste de sa brigade, son chef lui offre une « promotion » dans le petit village de Sandford dans le Gloucestershire, où il ne se passe quasiment rien.', '2007', 'hotfuzz.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (27, 'Arnaques, crimes et botanique', 'Guy Ritchie', 8.09999999999999964, 'Eddy, un joueur invétéré, s''apprête à participer à la plus grosse partie de cartes de sa vie avec un enjeu de cent mille livres, somme qu''il a durement amassée avec ses trois acolytes, Tom, Bacon et Soap. Eddy est considéré comme l''un des meilleurs joueurs du circuit, mais la partie s''avère être un coup monté à l''issue duquel il doit cinq cent mille livres à son adversaire Hatchet Harry. Ce dernier lui donne une semaine pour réunir cette somme, sinon il aura les doigts coupés.', '1998', 'Arnaques_crimes_et_botanique.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (28, 'Shaun of the dead', 'Edgar Wright', 8, '&Agrave; presque 30 ans, Shaun ne fait pas grand-chose de sa vie.Exc&eacute;d&eacute;e par ses vaines promesses et son incapacit&eacute; &agrave; se consacrer un peu &agrave; leur couple, sa copine Liz d&eacute;cide de rompre. Shaun est d&eacute;cid&eacute; &agrave; tout r&eacute;parer, et tant pis si les zombies d&eacute;ferlent sur Londres...', '2004', 'shaun.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (47, 'Casablanca', 'Michael Curtiz', 8.5, 'A Casablanca, pendant la Seconde Guerre mondiale, le night-club le plus couru de la ville est tenu par Rick Blaine, un Américain en exil. Mais l''établissement sert également de refuge à ceux qui voudraient se procurer les papiers nécessaires pour quitter le pays. Lorsque Rick voit débarquer un soir le dissident politique Victor Laszlo et son épouse Ilsa, quelle n''est pas sa surprise de retrouver dans ces circonstances le grand amour de sa vie...', '1942', 'casablanca.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (48, 'Star Wars', 'George Lucas', 8.59999999999999964, 'Il y a bien longtemps, dans une galaxie très lointaine... La guerre civile fait rage entre l''Empire galactique et l''Alliance rebelle. Capturée par les troupes de choc de l''Empereur menées par le sombre et impitoyable Dark Vador, la princesse Leia Organa dissimule les plans de l''Etoile Noire, une station spatiale invulnérable, à son droïde R2-D2 avec pour mission de les remettre au Jedi Obi-Wan Kenobi.', '1977', 'starwars.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (49, 'Léon', 'Luc Besson', 8.5, 'Un tueur à gages répondant au nom de Léon prend sous son aile Mathilda, une petite fille de douze ans, seule rescapée du massacre de sa famille. Bientôt, Léon va faire de Mathilda une "nettoyeuse", comme lui. Et Mathilda pourra venger son petit frère...', '1994', 'leon.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (50, 'Les Aventuriers de l''Arche Perdue', 'Steven Spielberg', 8.5, '1936. Parti à la recherche d''une idole sacrée en pleine jungle péruvienne, l''aventurier Indiana Jones échappe de justesse à une embuscade tendue par son plus coriace adversaire : le Français René Belloq. Revenu à la vie civile à son poste de professeur universitaire d''archéologie, il est mandaté par les services secrets et par son ami Marcus Brody, conservateur du National Museum de Washington, pour mettre la main sur le Médaillon de Râ.', '1981', 'aventuriersarcheperdue.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (51, 'Psychose', 'Alfred Hitchcock', 8.5, 'Marion Crane en a assez de ne pouvoir mener sa vie comme elle l''entend. Son travail ne la passionne plus, son amant ne peut l''épouser car il doit verser une énorme pension alimentaire le laissant sans le sou... Mais un beau jour, son patron lui demande de déposer 40 000 dollars à la banque. La tentation est trop grande, et Marion s''enfuit avec l''argent.', '1960', 'psychose.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (52, 'Fenêtre sur cour', 'Alfred Hitchcock', 8.5, 'A cause d''une jambe cassée, le reporter-photographe L. B. Jeffries est contraint de rester chez lui dans un fauteuil roulant. Homme d''action et amateur d''aventure, il s''aperçoit qu''il peut tirer parti de son immobilité forcée en étudiant le comportement des habitants de l''immeuble qu''il occupe dans Greenwich Village. Et ses observations l''amènent à la conviction que Lars Thorwald, son voisin d''en face, a assassiné sa femme.', '1954', 'fenetresurcour.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (53, 'Les infiltrés', 'Martin Scorsese', 8.5, 'A Boston, une lutte sans merci oppose la police à la pègre irlandaise.
+Pour mettre fin au règne du parrain Frank Costello, la police infiltre son gang avec "un bleu" issu des bas quartiers, Billy Costigan.
+Tandis que Billy s''efforce de gagner la confiance du malfrat vieillissant, Colin Sullivan entre dans la police au sein de l''Unité des Enquêtes Spéciales, chargée d''éliminer Costello. Mais Colin fonctionne en "sous-marin" et informe Costello des opérations qui se trament contre lui.
+', '2006', 'lesinfiltres.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (54, 'Apocalypse Now', 'F.F. Coppola', 8.5, 'Cloîtré dans une chambre d''hôtel de Saïgon, le jeune capitaine Willard, mal rasé et imbibé d''alcool, est sorti de sa prostration par une convocation de l''état-major américain. Le général Corman lui confie une mission qui doit rester secrète : éliminer le colonel Kurtz, un militaire aux méthodes quelque peu expéditives et qui sévit au-delà de la frontière cambodgienne.', '1979', 'apocalypsenow.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (55, 'Eskiya le bandit', 'Yavuz Turgui', 8.09999999999999964, 'Baran le bandit, vengeur des pauvres, rejoint Istanbul après avoir passé 35 ans en prison, à la recherche de son amour perdu. Il est alors plongé dans un univers qui lui est totalement étranger. Mais pour Baran, une seule chose compte : retrouver et faire payer celui qui l''a jadis dénoncé avant de s''enfuir avec l''élue de son coeur...', '1996', 'Eskiya.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (56, 'La vie des autres', 'F.H. Von Donnersmarck', 8.40000000000000036, 'Au début des années 1980, en Allemagne de l''Est, l''auteur à succès Georg Dreyman et sa compagne, l''actrice Christa-Maria Sieland, sont considérés comme faisant partie de l''élite des intellectuels de l''Etat communiste, même si, secrètement, ils n''adhèrent aux idées du parti.
+Le Ministère de la Culture commence à s''intéresser à Christa et dépêche un agent secret, nommé Wiesler, ayant pour mission de l''observer.
+', '2006', 'laviedesautres.jpeg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (57, 'Django Unchained', 'Quentin Tarantino', 8.40000000000000036, 'Dans le sud des États-Unis, deux ans avant la guerre de Sécession, le Dr King Schultz, un chasseur de primes allemand, fait l''acquisition de Django, un esclave qui peut l''aider à traquer les frères Brittle, les meurtriers qu''il recherche. Schultz promet à Django de lui rendre sa liberté lorsqu''il aura capturé les Brittle - morts ou vifs.', '2012', 'Djangounchained.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (58, 'Les sentiers de la gloire', 'Stanley Kubrick', 8.40000000000000036, 'En 1916, durant la Première Guerre mondiale, le général français Broulard ordonne au général Mireau de lancer une offensive suicidaire contre une position allemande imprenable, surnommée "La fourmilière". Au moment de l''attaque, les soldats tombent par dizaines et leurs compagnons, épuisés, refusent d''avancer...', '1957', 'sentiersdelagloire.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (59, 'Wall-E', 'Andrew Stanton', 8.40000000000000036, 'Faites la connaissance de WALL-E (prononcez "Walli") : WALL-E est le dernier être sur Terre et s''avère être un... petit robot ! 700 ans plus tôt, l''humanité a déserté notre planète laissant à cette incroyable petite machine le soin de nettoyer la Terre. Mais au bout de ces longues années, WALL-E a développé un petit défaut technique : une forte personnalité. Extrêmement curieux, très indiscret, il est surtout un peu trop seul...', '2008', 'walle.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (60, 'Citizen Kane', 'Orson Welles', 8.40000000000000036, 'A la mort du milliardaire Charles Foster Kane, un grand magnat de la presse, Thompson, un reporter, enquête sur sa vie. Les contacts qu''il prend avec ses proches lui font découvrir un personnage gigantesque, mégalomane, égoïste et solitaire.', '1941', 'citizenkane.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (61, 'Le tombeau des lucioles', 'Isao Takahata', 8.40000000000000036, 'Japon, été 1945. Après le bombardement de Kobé, Seita, un adolescent de quatorze ans et sa petite soeur de quatre ans, Setsuko, orphelins, vont s''installer chez leur tante à quelques dizaines de kilomètres de chez eux. Celle-ci leur fait comprendre qu''ils sont une gêne pour la famille et doivent mériter leur riz quotidien. Seita décide de partir avec sa petite soeur.', '1988', 'letombeaudeslucioles.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (62, 'Le Dictateur', 'Charlie Chaplin', 8.40000000000000036, 'Dans le ghetto juif vit un petit barbier qui ressemble énormément à Adenoid Hynkel, le dictateur de Tomania qui a décidé l''extermination du peuple juif. Au cours d''une rafle, le barbier est arrêté en compagnie de Schultz, un farouche adversaire d''Hynkel...', '1940', 'dictateur.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (63, 'Princesse Mononoké', 'Hayao Miyazaki', 8.40000000000000036, 'Au XVe siècle, durant l''ère Muromachi, la forêt japonaise, jadis protégée par des animaux géants, se dépeuple à cause de l''homme. Un sanglier transformé en démon dévastateur en sort et attaque le village d''Ashitaka, futur chef du clan Emishi. Touché par le sanglier qu''il a tué, celui-ci est forcé de partir à la recherche du dieu Cerf pour lever la malédiction qui lui gangrène le bras.', '1997', 'mononoke.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (64, 'Le retour du Jedi', 'George Lucas', 8.40000000000000036, 'L''Empire galactique est plus puissant que jamais : la construction de la nouvelle arme, l''Etoile de la Mort, menace l''univers tout entier... Arrêté après la trahison de Lando Calrissian, Han Solo est remis à l''ignoble contrebandier Jabba Le Hutt par le chasseur de primes Boba Fett.', '1983', 'retourdujedi.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (65, 'Reservoir Dogs', 'Quentin Tarantino', 8.40000000000000036, 'Après un hold-up manqué, des cambrioleurs de haut vol font leurs comptes dans une confrontation violente, pour découvrir lequel d''entre eux les a trahis.', '1992', 'reservoirdogs.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (66, 'Témoin à charge', 'Billy Wilder', 8.30000000000000071, 'A peine remis d''un infarctus qui a failli le terrasser, Sir Wilfrid Robarts, ténor du barreau, accepte de prendre la défense de Leonard Stephen Vole, accusé de meurtre. L''affaire, déjà difficilement plaidable, se complique encore lorsque Christine Vole, l''épouse du prévenu, devient l''un des témoins capitaux de l''accusation...', '1957', 'temoinacharge.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (67, 'Requiem for a dream', 'Darren Aronofsky', 8.30000000000000071, 'Harry Goldfarb est un junkie. Il passe ses journées en compagnie de sa petite amie Marion et son copain Tyrone. Ensemble, ils s''inventent un paradis artificiel. En quête d''une vie meilleure, le trio est entraîné dans une spirale infernale qui les enfonce toujours un peu plus dans l''angoisse et le désespoir.', '2000', 'requiemforadream.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (68, 'Vivre', 'Zhang Yimou', 8.09999999999999964, 'Dans un village chinois des années 40. C''est parce qu''il est riche que Fugui, un jeune homme, joue plus que de raison, en dépit des admonestations de sa femme, Jiazhen. Fugui en vient à miser sa propre maison, qu''il perd, au profit de Long Er. Ruiné, il forme une troupe de théâtre d''ombres avec Chunsheng tandis que Jiazhen, enceinte, le quitte en emmenant sa fille, Fengxia.', '1952', 'vivre.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (69, 'Monty Python: Sacré Graal!', 'Terry Gilliam', 8.30000000000000071, 'Le roi Arthur et les Chevaliers de la Table Ronde se lancent à la conquête du Graal, chevauchant de fantômatiques montures dans un bruitage de noix de coco cognées. La petite troupe va devoir passer mille épreuves, dont un chevalier à trois têtes, des jouvencelles en chaleur, voire même un terrible lapin tueur.', '1975', 'sacregraal.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (70, 'Rashomon', 'Akira Kurosawa', 8.30000000000000071, 'Kyoto, au XIe siècle. Sous le portique d''un vieux temple en ruines, Rashômon, trois hommes s''abritent de la pluie. Les guerres et les famines font rage. Pourtant un jeune moine et un vieux bûcheron sont plus terrifiés encore par le procès auquel ils viennent d''assister. Ils sont si troublés qu''ils vont obliger le troisième voyageur à écouter le récit de ce procès : celui d''un célèbre bandit accusé d''avoir violé une jeune femme et tué son mari, un samouraï.', '1950', 'rashomon.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (71, 'Eve', 'Joseph L. Mankiewicz', 8.30000000000000071, 'Eve Harrington reçoit, des mains d''un vieil acteur, le Prix Sarah Siddons. L''entourage de celle-ci se souvient de son ascension.', '1950', 'Eve.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (72, 'Toy Story', 'Lee Unkrich', 8.30000000000000071, 'Quand le jeune Andy quitte sa chambre, ses jouets se mettent à mener leur propre vie sous la houlette de son pantin préféré, Woody le cow-boy. Andy ignore également que chaque anniversaire est une source d''angoisse pour ses jouets qui paniquent à l''idée d''être supplantés par un nouveau venu. Ce qui arrive quand Buzz l''éclair est offert à Andy.', '1995', 'toystory.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (73, 'L''arnaque', 'George Roy Hill', 8.30000000000000071, 'A Chicago, en 1936, Johnny Hooker et son acolyte Coleman volent sans le savoir le convoyeur de fonds de Doyle Lonnegan, un dangereux gangster de New York. Coleman est aussitôt abattu par le gang de ce dernier et Hooker se réfugie chez Henry Gondorff, un spécialiste de l''arnaque.', '1973', 'arnaque.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (74, 'Le voleur de bicyclette', 'Vittorio De Sica', 8.30000000000000071, 'Chômeur depuis deux ans, Antonio trouve un emploi de colleur d''affiches, mais il se fait voler sa bicyclette, outil indispensable dans le cadre de son nouveau métier.', '1948', 'voleurbicyclette.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (75, 'Elephant Man', 'Ashley Montagu', 8.09999999999999964, 'Londres, 1884. Le chirurgien Frederick Treves découvre un homme complètement défiguré et difforme, devenu une attraction de foire. John Merrick, " le monstre ", doit son nom de Elephant Man au terrible accident que subit sa mère. Alors enceinte de quelques mois, elle est renversée par un éléphant. Impressionné par de telles difformités, le Dr. Treves achète Merrick, l''arrachant ainsi à la violence de son propriétaire, et à l''humiliation quotidienne d''être mis en spectacle.', '1980', 'elephantman.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (76, 'Une séparation', 'Asghar Farhadi', 8.30000000000000071, 'Lorsque sa femme le quitte, Nader engage une aide-soignante pour s''occuper de son père malade. Il ignore alors que la jeune femme est enceinte et a accepté ce travail sans l''accord de son mari, un homme psychologiquement instabe...', '2011', 'uneseparation.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (77, 'Taare Zameen Par', 'Amole Gupte', 8.30000000000000071, 'Ishaan Awasthi, âgé de huit ans, est un enfant espiègle et imaginatif. Issu d''une famille aisée, ses piètres résultats scolaires font le désespoir de ses parents qui décident de l''inscrire dans un pensionnat pour qu''il y acquière rigueur, goût du travail et de la réussite. Mais Ishaan se renferme et s''étiole jusqu''au jour où un jeune professeur découvre ses talents de peintre et sa dyslexie, cause de ses difficultés d''apprentissage.', '2007', 'Taare_Zameen_Par.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (78, 'Scarface', 'Brian de Palma', 8.30000000000000071, 'En 1980, Tony "Scarface" Montana bénéficie d''une amnistie du gouvernement cubain pour retourner en Floride. Ambitieux et sans scrupules, il élabore un plan pour éliminer un caïd de la pègre et prendre la place qu''il occupait sur le marché de la drogue.', '1983', 'SCARFACE.JPG');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (79, 'Chinatown', 'Roman Polanski', 8.09999999999999964, 'Gittes, détective privé, reçoit la visite d''une fausse Mme Mulwray, qui lui demande de filer son mari, ingénieur des eaux à Los Angeles. Celui-ci est retrouvé mort, noyé. Gittes s''obstine dans son enquête, malgré les menaces de tueurs professionnels.', '1974', 'chinatown.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (80, 'Indiana Jones et la dernière croisade', 'Steven Spielberg', 8.30000000000000071, 'L''archéologue aventurier Indiana Jones se retrouve aux prises avec un maléfique milliardaire. Aux côtés de la cupide Elsa et de son père, il part à la recherche du Graal.', '1989', 'ladernierecroisade.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (81, 'La ruée vers l''or', 'Charlie Chaplin', 8.09999999999999964, 'A la fin du XIXe siècle, dans le Klondike au Canada, un attroupement de chercheurs d''or s''active dans les montagnes enneigées. Parmi eux, Charlot, un prospecteur, se rend dans une cabane où il rencontre Big Jim avec qui il part à la recherche d''une mine d''or.', '1925', 'rueeverslor.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (82, 'Le labyrinthe de Pan', 'Guillermo Del Toro', 8.09999999999999964, 'Carmen, récemment remariée, s''installe avec sa fille Ofélia chez son nouvel époux, le très autoritaire Vidal, capitaine de l''armée franquiste.
+Alors que la jeune fille se fait difficilement à sa nouvelle vie, elle découvre près de la grande maison familiale un mystérieux labyrinthe. Pan, le gardien des lieux, une étrange créature magique et démoniaque, va lui révéler qu''elle n''est autre que la princesse disparue d''un royaume enchanté.', '2006', 'labyrinthepan.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (83, 'Le septiéme sceau', 'Ingmar Bergman', 8.09999999999999964, 'De retour des croisades, le chevalier Antonius Blok rencontre la Mort sur son chemin. Il lui demande un délai et propose une partie d''échecs. Dans le même temps, il rencontre le bateleur Jof et sa famille. Jof a vu la vierge Marie. Un des films qui fit découvrir le cinéma suédois et qui contribua à la grande notoriété de Bergman.', '1957', 'le_7_sceau.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (84, 'Ran', 'Akira Kurosawa', 8.09999999999999964, 'Dans le Japon du XVIe siècle, le seigneur Hidetora Ichimonji décide de se retirer et de partager son domaine entre ses trois fils, Taro, Jiro et Saburo. Mais la répartition de cet héritage va déchirer la famille.', '1985', 'ran.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (85, 'Piège de cristal', 'John Mc Tiernan', 8.09999999999999964, 'John McClane, policier new-yorkais, est venu rejoindre sa femme Holly, dont il est separé depuis plusieurs mois, pour les fêtes de Noël dans le secret espoir d''une réconciliation. Celle-ci est cadre dans une multinationale japonaise, la Nakatomi Corporation. Son patron, M. Takagi, donne une soirée en l''honneur de ses employés, à laquelle assiste McClane. Tandis qu''il s''isole pour téléphoner, un commando investit l''immeuble et coupe toutes les communications avec l''extérieur...', '1988', 'piege-de-cristal.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (86, 'Sur les quais', 'Elia Kazan', 8.09999999999999964, 'Un jeune docker, Terry Malloy, ancien boxeur, est manipulé par son frère, avocat du syndicat des dockers dirigé par le crapuleux Johnny Friendly. Il assiste sans intervenir au meurtre d''un employé qui voulait dénoncer les méthodes illégales de ce dernier. Malloy se retrouve devant un cas de conscience...', '1954', 'surlesquais.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (112, 'Casino', 'Martin Scorsese', 8.09999999999999964, 'Dans les annees soixante-dix à Las Vegas, Ace Rothstein dirige d''une main de fer l''hôtel-casino Tangiers, financé en sous-main par le puissant syndicat des camionneurs. Le Tangiers est l''un des casinos les plus prospères de la ville et Ace est devenu le grand manitou de Las Vegas, secondé par son ami d''enfance, Nicky Santoro. Impitoyable avec les tricheurs, Rothstein se laisse un jour séduire par une virtuose de l''arnaque d''une insolente beauté, Ginger McKenna.', '1995', 'casino.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (113, 'Le chateau ambulant', 'Hayao Miyazaki', 8.09999999999999964, 'La jeune Sophie, âgée de 18 ans, travaille sans relâche dans la boutique de chapelier que tenait son père avant de mourir. Lors de l''une de ses rares sorties en ville, elle fait la connaissance de Hauru le Magicien. Celui-ci est extrêmement séduisant, mais n''a pas beaucoup de caractère... Se méprenant sur leur relation, une sorcière jette un épouvantable sort sur Sophie et la transforme en vieille femme de 90 ans.', '2004', 'chateauambulant.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (114, 'Munna Bhai M.B.B.S.', 'Rajkumar Hirani', 8.09999999999999964, 'Quand il s''est installé à Mumbai, Munna a formé un gang spécialisé dans les enlèvements et les demandes de rançons. Lors de la visite annuelle de ses parents à qui il dissimule ses véritables activités, le repaire du gang se transforme en hôpital dont Munna est le médecin-chef. Au cours d''une balade dans un parc de Mumbai, Hari, le père de Munna, rencontre le Dr. Asthana, un ancien ami perdu de vue.', '2003', 'munnabhai.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (115, 'Voyage au bout de l''enfer', 'Michael Cimino', 8.09999999999999964, '1968 : trois ouvriers sidérurgistes de Clairton, petite ville de Pennsylvanie, engagés dans la guerre du Viêt Nam, vont être marqués par l''atrocité de la guerre, que ce soit physiquement ou psychologiquement.', '1978', 'voyage-au-bout-de-l-enfer.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (116, 'Le mécano de la générale', 'Buster Keaton', 8.09999999999999964, 'Le cheminot Johnnie Gray partage sa vie entre sa fiancée Annabelle Lee et sa locomotive, la Générale. En pleine Guerre de Sécession, il souhaite s''engager dans l''armée sudiste, mais celle-ci estime qu''il se montrera plus utile en restant mécanicien. Pour prouver à Annabelle qu''il n''est pas lâche, il se lance seul à la poursuite d''espions nordistes qui se sont emparés d''elle et de sa locomotive...', '1926', 'mecanodelageneral.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (117, 'Le loup de Wall Street', 'Martin Scorsese', 8.09999999999999964, 'L''argent. Le pouvoir. Les femmes. La drogue. Les tentations étaient là, à portée de main, et les autorités n''avaient aucune prise. Aux yeux de Jordan et de sa meute, la modestie était devenue complètement inutile. Trop n''était jamais assez...', '2013', 'leloupdewallstreet.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (118, 'Les évadés', 'Frank Darabont', 9.09999999999999964, 'En 1947, Andy Dufresne, un jeune banquier, est condamné à la prison à vie pour le meurtre de sa femme et de son amant. Ayant beau clamer son innocence, il est emprisonné à Shawshank, le pénitencier le plus sévère de l''Etat du Maine. Il y fait la rencontre de Red, un Noir désabusé, détenu depuis vingt ans. Commence alors une grande histoire d''amitié entre les deux hommes...', '1994', 'lesevades.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (119, 'Le Parrain', 'F.F.Coppola', 9.09999999999999964, 'Le "Parrain", Don Vito Corleone, un des chefs respectés de la mafia new-yorkaise, vieillit. Comme il refuse de convertir ses "activités" et de faire du trafic de drogue, certains de ses pairs se font abattre dans la rue. Lui même est victime d''une tentative d''assassinat. Mike, son plus jeune fils, qui jusque-là avait voulu se tenir à l''écart de la "famille", devient le plus dévoué des héritiers..', '1972', 'leparrain.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (120, 'Blade Runner', 'Ridley Scott', 8.09999999999999964, 'Dans les dernières années du 20ème siècle, des milliers d''hommes et de femmes partent à la conquête de l''espace, fuyant les mégalopoles devenues insalubres. Sur les colonies, une nouvelle race d''esclaves voit le jour : les répliquants, des androïdes que rien ne peut distinguer de l''être humain. Los Angeles, 2019. Après avoir massacré un équipage et pris le contrôle d''un vaisseau, les répliquants de type Nexus 6, le modèle le plus perfectionné, sont désormais déclarés "hors la loi".', '1982', 'bladerunner.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (121, 'La Liste de Schindler', 'Steven Spielberg', 8.90000000000000036, 'Evocation des années de guerre d''Oskar Schindler, fils d''industriel d''origine autrichienne rentré à Cracovie en 1939 avec les troupes allemandes. Il va, tout au long de la guerre, protéger des juifs en les faisant travailler dans sa fabrique et en 1944 sauver huit cents hommes et trois cents femmes du camp d''extermination de Auschwitz-Birkenau.', '1993', 'listedeschindler.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (122, 'Le bon, la brute et le truand', 'Sergio Leone', 8.90000000000000036, 'Pendant la Guerre de Sécession, trois hommes, préférant s''intéresser à leur profit personnel, se lancent à la recherche d''un coffre contenant 200 000 dollars en pièces d''or volés à l''armée sudiste. Tuco sait que le trésor se trouve dans un cimetière, tandis que Joe connaît le nom inscrit sur la pierre tombale qui sert de cache. Chacun a besoin de l''autre. Mais un troisième homme entre dans la course : Setenza, une brute qui n''hésite pas à massacrer femmes et enfants pour parvenir à ses fins.', '1966', 'le-bon-la-brute-et-le-truand.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (123, 'Le Seigneur des Anneaux - Le Retour du Roi', 'Peter Jackson', 8.90000000000000036, 'Les armées de Sauron ont attaqué Minas Tirith, la capitale de Gondor. Jamais ce royaume autrefois puissant n''a eu autant besoin de son roi. Mais Aragorn trouvera-t-il en lui la volonté d''accomplir sa destinée ?
+Tandis que Gandalf s''efforce de soutenir les forces brisées de Gondor, Théoden exhorte les guerriers de Rohan à se joindre au combat. 
+', '2003', 'le-retour-du-roi.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (124, 'Le Seigneur des Anneaux - La Communauté de l''Anneau', 'Peter Jackson', 8.80000000000000071, 'Le jeune Hobbit Frodon Sacquet hérite un jour d''un anneau. Il s''agit de l''Anneau Unique, un instrument de pouvoir absolu qui permettrait à Sauron, le Seigneur des ténèbres, de régner sur la Terre du Milieu et de réduire en esclavage ses peuples. À moins que Frodon, aidé d''une Compagnie constituée de Hobbits, d''Hommes, d''un Magicien, d''un Nain, et d''un Elfe, ne parvienne à emporter l''Anneau à travers la Terre du Milieu jusqu''à la Crevasse du Destin', '2001', 'communautedelanneau.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (125, 'Forrest Gump', 'Robert Zemeckis', 8.59999999999999964, 'Quelques décennies d''histoire américaine, des années 1940 à la fin du XXème siècle, à travers le regard et l''étrange odyssée d''un homme simple et pur, Forrest Gump.', '1994', 'forrestgump.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (126, 'Vol au-dessus d''un nid de coucou', 'Milos Forman', 8.59999999999999964, 'Rebellion dans un hôpital psychiatrique à l''instigation d''un malade qui se révolte contre la dureté d''une infirmière.', '1975', 'volaudessusd''unniddecoucou.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (127, 'Les Affranchis', 'Martin Scorsese', 8.59999999999999964, 'Depuis sa plus tendre enfance, Henry Hill, né d''un père irlandais et d''une mère sicilienne, veut devenir gangster et appartenir à la Mafia. Adolescent dans les années cinquante, il commence par travailler pour le compte de Paul Cicero et voue une grande admiration pour Jimmy Conway, qui a fait du détournement de camions sa grande spécialité.', '1990', 'lesaffranchis.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (128, 'Matrix', 'Frères Wachowski', 8.59999999999999964, 'Programmeur anonyme dans un service administratif le jour, Thomas Anderson devient Neo la nuit venue. Sous ce pseudonyme, il est l''un des pirates les plus recherchés du cyber-espace. A cheval entre deux mondes, Neo est assailli par d''étranges songes et des messages cryptés provenant d''un certain Morpheus. Celui-ci l''exhorte à aller au-delà des apparences et à trouver la réponse à la question qui hante constamment ses pensées : qu''est-ce que la Matrice ?', '1999', 'matrix.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (129, 'Les Sept Samouraïs', 'Akira Kurosawa', 8.59999999999999964, 'Au Moyen-Age, la tranquillité d''un petit village japonais est troublée par les attaques répétées d''une bande de pillards. Sept samouraïs sans maître acceptent de défendre les paysans impuissants.', '1954', 'les7samourais.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (130, 'Interstellar', 'Christopher Nolan', 8.5, 'Dans un futur proche, la Terre est de moins en moins accueillante pour l''humanité qui connaît une grave crise alimentaire. Une humanité tellement résignée sur son destin que les écoles enseignent désormais que les missions Apollo n''eurent pas lieu et ne servirent qu''à pousser la Russie à se ruiner en projets concurrents.', '2014', 'Interstellar.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (131, 'Usual Suspects', 'Bryan Singer', 8.5, 'Une légende du crime contraint cinq malfrats à aller s''acquitter d''une tâche très périlleuse. Ceux qui survivent pourront se partager un butin de 91 millions de dollars.', '1995', 'usualsuspects.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (132, 'Le Silence des Agneaux', 'Jonathan Demme', 8.5, 'Un psychopathe connu sous le nom de Buffalo Bill sème la terreur dans le Middle West en kidnappant et en assassinant de jeunes femmes. Clarice Starling, une jeune agent du FBI, est chargée d''interroger l''ex-psychiatre Hannibal Lecter. Psychopathe redoutablement intelligent et porté sur le cannibalisme, Lecter est capable de lui fournir des informations concernant Buffalo Bill ainsi que son portrait psychologique.', '1991', 'silencedesagneaux.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (133, 'Il était une fois dans l''Ouest', 'Sergio Leone', 8.5, 'Alors qu''il prépare une fête pour sa femme, Bet McBain est tué avec ses trois enfants. Jill McBain hérite alors des terres de son mari, terres que convoite Morton, le commanditaire du crime (celles-ci ont de la valeur maintenant que le chemin de fer doit y passer). Mais les soupçons se portent sur un aventurier, Cheyenne...', '1968', 'Il-etait-une-fois-dans-l-Ouest.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (134, 'La Vie est Belle', 'Roberto Benigni', 8.5, 'En 1938, Guido, jeune homme plein de gaieté, rêve d''ouvrir une librairie, malgré les tracasseries de l''administration fasciste. Il tombe amoureux de Dora, institutrice étouffée par le conformisme familial et l''enlève le jour de ses fiançailles avec un bureaucrate du régime. Cinq ans plus tard, Guido et Dora ont un fils: Giosue. Mais les lois raciales sont entrées en vigueur et Guido est juif. Il est alors déporté avec son fils.', '1997', 'lavieestbelle.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (135, 'American History X', 'Tony Kaye', 8.5, 'A travers l''histoire d''une famille américaine, ce film tente d''expliquer l''origine du racisme et de l''extrémisme aux États-Unis. Il raconte l''histoire de Derek qui, voulant venger la mort de son père, abattu par un dealer noir, a épousé les thèses racistes d''un groupuscule de militants d''extrême droite. Ces théories le mèneront à commettre un double meurtre entrainant son jeune frère, Danny, dans la spirale de la haine.', '1998', 'americanhistoryx.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (136, 'Dans ses yeux', 'J.J. Campanella', 8.09999999999999964, '1974, Buenos Aires. Benjamin Esposito enquête sur le meurtre violent d''une jeune femme. 
+25 ans plus tard, il décide d''écrire un roman basé sur cette affaire "classée" dont il a été témoin et protagoniste. Ce travail d''écriture le ramène à ce meurtre qui l''obsède depuis tant d''années mais également à l''amour qu''il portait alors à sa collègue de travail. Benjamin replonge ainsi dans cette période sombre de l''Argentine où l''ambiance était étouffante et les apparences trompeuses...', '2009', 'dans_ses_yeux.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (137, 'Le voyage de Chihiro', 'Hayao Miyazaki', 8.5, 'Sur une route déserte, une petite famille se retrouve face à un immense bâtiment rouge au centre duquel s''ouvre un long tunnel. De l''autre côté du passage se dresse une ville fantôme. Les parents découvrent dans un restaurant désert de nombreux mets succulents et ne tardent pas à se jeter dessus. Ils se retrouvent alors transformés en cochons. Prise de panique, Chihiro, notre héroïne, tente de s''enfuir et se dématérialise progressivement dans une autre réalité...', '2001', 'chihiro.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (139, 'Intouchables', 'Eric Toledano', 8.5, 'A la suite d''un accident de parapente, Philippe, riche aristocrate, engage comme aide à domicile Driss, un jeune de banlieue tout juste sorti de prison. Bref la personne la moins adaptée pour le job. Ensemble ils vont faire cohabiter Vivaldi et Earth Wind and Fire, le verbe et la vanne, les costumes et les bas de survêtement...', '2011', 'intouchables.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (140, 'Terminator 2 - Le Jugement Dernier', 'James Cameron', 8.5, 'En 2029, après leur échec pour éliminer Sarah Connor, les robots de Skynet programment un nouveau Terminator, le T-1000, pour retourner dans le passé et éliminer son fils John Connor, futur leader de la résistance humaine. Ce dernier programme un autre cyborg, le T-800, et l''envoie également en 1995, pour le protéger. Une seule question déterminera le sort de l''humanité : laquelle des deux machines trouvera John la première ?', '1991', 'terminator-2.jpg');
+INSERT INTO film (id_film, titre, realisateur, note, resume, sortie, affiche) VALUES (1, '12 hommes en colère', 'Sydney Lumet', 8.90000000000000036, ' Un jeune homme d''origine modeste est accusé du meurtre de son père et risque la peine de mort. Le jury composé de douze hommes se retire pour délibérer et procède immédiatement à un vote : onze votent coupable, or la décision doit être prise à l''unanimité. Le juré qui a voté non-coupable, sommé de se justifier, explique qu''il a un doute et que la vie d''un homme mérite quelques heures de discussion. Il s''emploie alors à les convaincre un par un.', '1957', '12hommesencolere.jpg');
+
+
+--
+-- TOC entry 2605 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: film_numseq; Type: SEQUENCE SET; Schema: public; Owner: olivia.tournois
+--
+
+SELECT pg_catalog.setval('film_numseq', 140, true);
+
+
+--
+-- TOC entry 2595 (class 0 OID 1897831)
+-- Dependencies: 176
+-- Data for Name: prix; Type: TABLE DATA; Schema: public; Owner: olivia.tournois
+--
+
+INSERT INTO prix (nom_cat, prix) VALUES ('enfant', 3.00);
+INSERT INTO prix (nom_cat, prix) VALUES ('adulte', 5.00);
+INSERT INTO prix (nom_cat, prix) VALUES ('etudiant', 4.50);
+
+
+--
+-- TOC entry 2587 (class 0 OID 1897791)
+-- Dependencies: 168
+-- Data for Name: reservation; Type: TABLE DATA; Schema: public; Owner: olivia.tournois
+--
+
+INSERT INTO reservation (num_res, id_seance, id_client, prix_total, enfant, etudiant, adulte, nbre_places) VALUES (19, 24, 21, 250.00, 20, 20, 20, 60);
+INSERT INTO reservation (num_res, id_seance, id_client, prix_total, enfant, etudiant, adulte, nbre_places) VALUES (20, 17, 21, 62.50, 5, 5, 5, 15);
+INSERT INTO reservation (num_res, id_seance, id_client, prix_total, enfant, etudiant, adulte, nbre_places) VALUES (25, 24, 16, 125.00, 10, 10, 10, 30);
+INSERT INTO reservation (num_res, id_seance, id_client, prix_total, enfant, etudiant, adulte, nbre_places) VALUES (26, 17, 16, 25.00, 2, 2, 2, 6);
+
+
+--
+-- TOC entry 2606 (class 0 OID 0)
+-- Dependencies: 169
+-- Name: reservation_numseq; Type: SEQUENCE SET; Schema: public; Owner: olivia.tournois
+--
+
+SELECT pg_catalog.setval('reservation_numseq', 26, true);
+
+
+--
+-- TOC entry 2591 (class 0 OID 1897809)
+-- Dependencies: 172
+-- Data for Name: seance; Type: TABLE DATA; Schema: public; Owner: olivia.tournois
+--
+
+INSERT INTO seance (id_seance, num_salle, heure, id_film, dat, nbre_places_dispo) VALUES (25, 3, '11:30', 13, '2017-01-28', 300);
+INSERT INTO seance (id_seance, num_salle, heure, id_film, dat, nbre_places_dispo) VALUES (27, 1, '11:30', 17, '2016-12-20', 300);
+INSERT INTO seance (id_seance, num_salle, heure, id_film, dat, nbre_places_dispo) VALUES (24, 2, '14:30', 7, '2016-12-31', 110);
+INSERT INTO seance (id_seance, num_salle, heure, id_film, dat, nbre_places_dispo) VALUES (17, 2, '17:30', 1, '2017-01-07', 279);
+INSERT INTO seance (id_seance, num_salle, heure, id_film, dat, nbre_places_dispo) VALUES (26, 1, '11:30', 28, '2016-12-31', 200);
+INSERT INTO seance (id_seance, num_salle, heure, id_film, dat, nbre_places_dispo) VALUES (28, 3, '14:30', 6, '2016-12-31', 300);
+
+
+--
+-- TOC entry 2607 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: seance_numseq; Type: SEQUENCE SET; Schema: public; Owner: olivia.tournois
+--
+
+SELECT pg_catalog.setval('seance_numseq', 29, true);
+
+
+--
+-- TOC entry 2470 (class 2606 OID 1897806)
+-- Name: CLIENT_PK; Type: CONSTRAINT; Schema: public; Owner: olivia.tournois; Tablespace: 
+--
+
+ALTER TABLE ONLY client
+    ADD CONSTRAINT "CLIENT_PK" PRIMARY KEY (id_client);
+
+
+--
+-- TOC entry 2474 (class 2606 OID 1897824)
+-- Name: FILM_PK; Type: CONSTRAINT; Schema: public; Owner: olivia.tournois; Tablespace: 
+--
+
+ALTER TABLE ONLY film
+    ADD CONSTRAINT "FILM_PK" PRIMARY KEY (id_film);
+
+
+--
+-- TOC entry 2476 (class 2606 OID 1897838)
+-- Name: PRIX_PK; Type: CONSTRAINT; Schema: public; Owner: olivia.tournois; Tablespace: 
+--
+
+ALTER TABLE ONLY prix
+    ADD CONSTRAINT "PRIX_PK" PRIMARY KEY (nom_cat);
+
+
+--
+-- TOC entry 2468 (class 2606 OID 1897795)
+-- Name: RESERVATION_PK; Type: CONSTRAINT; Schema: public; Owner: olivia.tournois; Tablespace: 
+--
+
+ALTER TABLE ONLY reservation
+    ADD CONSTRAINT "RESERVATION_PK" PRIMARY KEY (num_res);
+
+
+--
+-- TOC entry 2472 (class 2606 OID 1897813)
+-- Name: SEANCE_PK; Type: CONSTRAINT; Schema: public; Owner: olivia.tournois; Tablespace: 
+--
+
+ALTER TABLE ONLY seance
+    ADD CONSTRAINT "SEANCE_PK" PRIMARY KEY (id_seance);
+
+
+--
+-- TOC entry 2478 (class 2606 OID 1897848)
+-- Name: ID_CLIENT_PK; Type: FK CONSTRAINT; Schema: public; Owner: olivia.tournois
+--
+
+ALTER TABLE ONLY reservation
+    ADD CONSTRAINT "ID_CLIENT_PK" FOREIGN KEY (id_client) REFERENCES client(id_client);
+
+
+--
+-- TOC entry 2479 (class 2606 OID 1897853)
+-- Name: ID_FILM_PK; Type: FK CONSTRAINT; Schema: public; Owner: olivia.tournois
+--
+
+ALTER TABLE ONLY seance
+    ADD CONSTRAINT "ID_FILM_PK" FOREIGN KEY (id_film) REFERENCES film(id_film);
+
+
+--
+-- TOC entry 2477 (class 2606 OID 1897843)
+-- Name: ID_SEANCE_PK; Type: FK CONSTRAINT; Schema: public; Owner: olivia.tournois
+--
+
+ALTER TABLE ONLY reservation
+    ADD CONSTRAINT "ID_SEANCE_PK" FOREIGN KEY (id_seance) REFERENCES seance(id_seance);
+
+
+--
+-- TOC entry 2602 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2016-12-30 18:29:38
+
+--
+-- PostgreSQL database dump complete
+--
+
