@@ -55,34 +55,34 @@ if(isset($_POST['modifier'])||isset($_POST['maj']))
 					<h3>
 						Inscription
 					</h3>
-					<form action="" method='post' id="">
+					<form action="<?php print $_SERVER['PHP_SELF']; ?>" method='post' id="form_modifInfo">
 						<div class="form-group">
 							 
 							<label>
 								Nom
 							</label>
-							<input type="text" id="nom_" name="nom" class="form-control" value="<?php echo $client[0]->nom?>" />
+							<input type="text" id="nom" name="nom" class="form-control" value="<?php echo $client[0]->nom?>" />
 						</div>
 						<div class="form-group">
 							 
 							<label>
 								Prenom
 							</label>
-							<input ttype="text" id="orenom_" name="prenom" class="form-control" value="<?php echo $client[0]->prenom?>" />
+							<input type="text" id="prenom" name="prenom" class="form-control" value="<?php echo $client[0]->prenom?>" />
 						</div>
                                                 <div class="form-group">
 							 
 							<label>
 								Pseudo
 							</label>
-							<input type="text" id="pseudo_" name="pseudo" class="form-control" value="<?php echo $client[0]->pseudo?>"/>
+							<input type="text" id="pseudo" name="pseudo" class="form-control" value="<?php echo $client[0]->pseudo?>"/>
 						</div>
                                                 <div class="form-group">
 							 
 							<label>
 								Email
 							</label>
-							<input type="email" id="mail_" name="email" class="form-control" value="<?php echo $client[0]->email?>" />
+							<input type="email" id="email" name="email" class="form-control" value="<?php echo $client[0]->email?>" />
 						</div>
 						<button class="btn btn-primary" type="submit" name="maj" id="maj" value="Mettre à jour" value="Mettre à jour">
 							Mettre à jour
@@ -102,6 +102,42 @@ if(isset($_POST['modifier'])||isset($_POST['maj']))
 }
 else if (isset($_POST['supprimer']))
 {
+    if (!isset($_POST['oui']))
+    {
+    ?><div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="blanc centre">Etes-vous sûr de vouloir supprimer votre compte?</h3>
+            </div>
+        </div>
+        <div class="row">
+                                   <div class="col-md-4 col-sm-4 col-xs-3">
+                                   </div>
+                                   <div>
+                                       <div class="col-md-2 col-sm-4 col-xs-6">
+                                           <form id="modifier" name="oui" method="post">
+                                               <input type="hidden" name="supprimer"/>
+                                                               <button  type="submit" name="oui" id="oui" value="Oui" class="btn btn-warning"">
+                                                                       Oui
+                                                               </button>
+                                                                   </form>
+                                       </div>
+                                       <div class="col-md-2 col-sm-4 col-xs-6">
+                                           <form id="supprimer" name="non" method="post">
+                                                                <button type="submit" name="non" id="non" value="Non" class="btn btn-primary">
+                                                                       Non
+                                                               </button>
+                                                                   </form>
+                                       </div>
+                   ²               </div>
+                                   <div class="col-md-4 col-sm-4 col-xs-3">
+                                   </div>
+           </div>
+    </div>
+<?php
+    }
+    else
+    {
         $log = new ClientDB($cnx);
         //function create($nom, $prenom,$pseudo,$email,$mdp)
         $retour = $log->delete($_SESSION['client']);
@@ -126,6 +162,7 @@ else if (isset($_POST['supprimer']))
 <?php
         } 
     }
+}
 else {
             $cli=new ClientDB($cnx);
         $client=$cli->read($_SESSION['client']);

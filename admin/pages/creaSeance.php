@@ -66,7 +66,7 @@ if (isset($_GET['ajout']))
 				</button>
 				<h4>
 				 Bravo!
-				</h4>Votre séance a bien été crée! <a href="./index.php?page=programme class="alert-link">  Retour</a>
+				</h4>Votre séance a bien été crée! <a href="./index.php?page=programme" class="alert-link">  Retour</a>
 			</div>
 		</div>
                 <?php

@@ -85,4 +85,29 @@ $(document).ready(function(){
         }
     });
     
+    $("#form_modifInfo").validate({
+        rules: {
+             email:
+                    { required:true,
+                      email:true,
+                      regex:/^[A-Za-z0-9._ -]+@[A-Za-z0-9.-]+[.][A-Za-z]+$/
+            },
+            nom:
+                    { required:true,
+                        regex:/^[A-Z][A-Za-z -]{1,30}$/
+            },
+            prenom:
+                    { required:true,
+                        regex:/^[A-Z][A-Za-z -]{1,30}$/
+            },
+            pseudo: { 
+                required:true,
+                regex:/^[A-Z][A-Za-z0-9 ]{1,30}$/
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        }
+    });
+    
 });

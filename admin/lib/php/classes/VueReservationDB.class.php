@@ -10,7 +10,7 @@ class VueReservationDB extends VueReservation{
     public function VueReservSelonClient($id) {
         $ok=0;
         try {
-            $query = "SELECT * FROM reserv where id_client=:id_client";
+            $query = "SELECT * FROM reserv where id_client=:id_client and dat>=CURRENT_DATE order by dat";
             $resultset = $this->_db->prepare($query);
             $resultset->bindValue(1, $id);
             $resultset->execute();
@@ -42,7 +42,7 @@ class VueReservationDB extends VueReservation{
     
     public function getAllReservations() {
         try {
-            $query = "SELECT * FROM reserv order by id_client";
+            $query = "SELECT * FROM reserv where dat >= CURRENT_DATE order by id_client";
             $resultset = $this->_db->prepare($query);
             $resultset->execute();
             $data = $resultset->fetchAll();
@@ -76,7 +76,7 @@ class VueReservationDB extends VueReservation{
           function read($id)
         {
             try {
-            $query = "SELECT * FROM reserv where num_res=:id ";
+            $query = "SELECT * FROM reserv where num_res=:id where and dat >= CURRENT_DATE order by dat";
             $resultset = $this->_db->prepare($query);
             $resultset->bindValue(1, $id);
             $resultset->execute();

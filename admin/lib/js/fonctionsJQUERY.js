@@ -93,6 +93,7 @@ $('document').ready(function(){
  
     }); 
     
+    /* ESSAI POUR AJAX
     $("#id_client").blur(function () {
         var id = $("#id_client").val();
             recherche = "id_client=" + id;
@@ -112,7 +113,7 @@ $('document').ready(function(){
 
             });
         
-    });
+    });*/
 
 });
 
