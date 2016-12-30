@@ -62,6 +62,37 @@ $('document').ready(function(){
  
     }); 
     
+    $('a[rel=tooltip3]').mouseover(function(e) {
+ 
+        // Récupérer la valeur de l'attribut title et l'assigner à une variable
+        var tip ="Cliquez ici pour afficher votre ticket";   
+        // Insérer notre infobulle avec son texte dans la page
+        $(this).append('<div id="tooltip3"><div class="tipHeader"></div><div class="tipBody">' + tip + '</div><div class="tipFooter"></div></div>');    
+ 
+        // Ajuster les coordonnées de l'infobulle
+        $('#tooltip3').css('top', e.pageY -200 );
+        $('#tooltip3').css('left', e.pageX - 300 );
+ 
+        // Faire apparaitre l'infobulle avec un effet fadeIn
+        $('#tooltip3').fadeIn('500');
+        $('#tooltip3').fadeTo('10',0.8);
+ 
+    }).mousemove(function(e) {
+ 
+        // Ajuster la position de l'infobulle au déplacement de la souris
+        $('#tooltip3').css('top', e.pageY -200 );
+        $('#tooltip3').css('left', e.pageX - 300 );
+ 
+    }).mouseout(function() {
+ 
+        // Réaffecter la valeur de l'attribut title
+        $(this).attr('title',$('.tipBody').html());
+ 
+        // Supprimer notre infobulle
+        $(this).children('div#tooltip3').remove();
+ 
+    }); 
+    
     $("#id_client").blur(function () {
         var id = $("#id_client").val();
             recherche = "id_client=" + id;

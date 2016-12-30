@@ -6,6 +6,14 @@
      
 }
 
+.titrepdf
+{
+    text-align: center;
+        font-size: 22px;
+    font-stretch:expanded;
+    color:darkblue;
+}
+
 .ongletPrinc
 {
     font-size:23px;
@@ -167,7 +175,7 @@ width:100%;
     position:absolute;
     z-index:9999;
     background-color: lightblue;
-    color:#fff;
+    color:black;
     font-size:13px;
     font-weight: bold;
     width:180px;   
@@ -188,6 +196,87 @@ width:100%;
     background-color: lightblue;
 }
 
+#tooltip3 {
+    position:absolute;
+    z-index:9999;
+    background-color: lightgreen;
+    color:black;
+    font-size:13px;
+    font-weight: bold;
+    width:180px;   
+}
+ 
+#tooltip3 .tipHeader {
+    height:8px;
+   background-color: lightgreen;
+}
+ 
+#tooltip3 .tipBody {
+    background-color: lightgreen;
+    padding:5px 5px 5px 15px;
+}
+ 
+#tooltip3 .tipFooter {
+    height:8px;
+    background-color: lightgreen;
+}
+
+
+.rowticket
+{
+    width:50%;
+}
+
+.cllticket
+{
+    padding:15px;
+    width:100%;
+}
+
+.tableauticket
+{
+    background:#DCF1FE;
+    width:100%;
+    font-size:13pt;
+    padding:15px;
+    border-collapse: separate;
+  border: 2px solid #000;
+}
+
+.tableaupdf
+{
+    width:100%;
+    font-size:11pt;
+    padding:10px;
+    border-collapse: separate;
+  border: 2px solid #000;
+}
+.titrepasgros
+{
+    text-align: center;
+    width:10%;
+    
+    background: lightblue;
+}
+.titrecellpdf
+{
+    width: 18%;
+    padding:10px;
+    text-align: center;
+    
+    background: lightblue;
+}
+
+.cellpdf
+{
+   padding:10px;
+    text-align: center;
+}
+
+.fondpdf
+{
+    border:solid black 2px;
+}
 .creme
 {
     background-color: #FFFEF0;

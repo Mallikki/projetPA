@@ -1,8 +1,62 @@
-
 <?php
+if (isset($_GET['pdf']))
+{
+    $info = new VueReservationDB($cnx);
+    $texte=$info->VueReservSelonClient($_SESSION['client']);
+    $nbrT = count($texte);
+    ob_start();
+    ?>
+    <link rel="icon" href="./admin/images/favicon.ico" />
+       <link rel="stylesheet" type="text/css" href="./admin/lib/css/cinema.css"/> 
+    <page class="fondpdf">
+        <h1 class="titrepdf">Vos réservations</h1>
+    <table class="tableaupdf">
+        <tr>
+            <th class="titrecellpdf" >Date</th>
+            <th class="titrepasgros">Salle</th>
+            <th class="titrepasgros">Heure</th>
+            <th class="titrecellpdf">Film</th>
+            <th class="titrepasgros">Enfant</th>
+            <th class="titrepasgros">Adulte</th>
+            <th class="titrepasgros">Etudiant</th>
+            <th class="titrepasgros">Prix</th>
+        </tr>
+        <?php
+        for ($i = 0; $i < $nbrT; $i++) {
+        ?>                   
+        <tr>
+            <td class="cellpdf"><?php $dat=$info->transform($texte[$i]->dat);print $dat ?></td>
+            <td class="cellpdf"><?php print $texte[$i]->num_salle?></td>
+            <td class="cellpdf"><?php print $texte[$i]->heure?></td>
+            <td class="cellpdf"><?php print utf8_encode($texte[$i]->titre)?></td>
+            <td class="cellpdf"><?php print $texte[$i]->enfant?></td>
+            <td class="cellpdf"><?php print $texte[$i]->adulte?></td>
+            <td class="cellpdf"><?php print $texte[$i]->etudiant?></td>
+            <td class="cellpdf"><?php print $texte[$i]->prix_total?></td>
+            </tr>
+        <?php } ?>
+    </table>
+    </page>
+    <?php
+    $content=ob_get_clean();
+    require_once('./admin/lib/php/html2pdf/html2pdf.class.php');
+    try
+    {
+        $html2pdf = new HTML2PDF('P','A4','fr');
+        $html2pdf->pdf->SetDisplayMode('fullpage');
+        $html2pdf->writeHTML($content);
+        ob_end_clean(); 
+        $html2pdf->Output('réservations.pdf');
+    } catch (Exception $ex) {
+        die($ex);
+    }
+    
+}
+else 
+{
 $info = new VueReservationDB($cnx);
 $texte=$info->VueReservSelonClient($_SESSION['client']);
-if (isset($_GET['delete'])||isset($_GET['misaj']))
+if (isset($_GET['delete'])||isset($_GET['misaj'])||isset($_GET['ticket']))
 {
     if (isset($_GET['delete']))
     {
@@ -42,7 +96,7 @@ if (isset($_GET['delete'])||isset($_GET['misaj']))
     <?php
         } 
     }
-    else
+    else if (isset($_GET['misaj']))
     {
     if (isset($_POST['modifier']))
     {
@@ -131,7 +185,7 @@ if (isset($_GET['delete'])||isset($_GET['misaj']))
                                                             <label>
                                                                     Adultes
                                                             </label>
-                                                            <input ttype="text" value="<?php print $texte[0]->adulte?>" id="adulte" name="adulte" class="form-control" />
+                                                            <input type="text" value="<?php print $texte[0]->adulte?>" id="adulte" name="adulte" class="form-control" />
                                                     </div>
                                                     <div class="form-group">
 
@@ -152,6 +206,49 @@ if (isset($_GET['delete'])||isset($_GET['misaj']))
     </div> <?php
     }
     }
+    else
+    {
+        $info = new VueReservationDB($cnx);
+        $texte=$info->read($_GET['id_res']);
+        ob_start();
+        ?>
+        <link rel="icon" href="./admin/images/favicon.ico" />
+           <link rel="stylesheet" type="text/css" href="./admin/lib/css/cinema.css"/> 
+        <page class="fondpdf">
+            <h1 class="titrepdf">Votre ticket pour "<?php print utf8_encode($texte[0]->titre)?>", le <?php $dat=$info->transform($texte[0]->dat);print $dat ?></h1>
+        <table class="tableauticket">
+            <tr class="rowticket">
+                <td class="cllticket">Date : <?php $dat=$info->transform($texte[0]->dat);print $dat ?></td>
+                <td class="cllticket">Adultes : <?php print $texte[0]->adulte?></td>
+            </tr>
+            <tr class="rowticket">
+                <td class="cllticket">Salle : <?php print $texte[0]->num_salle?></td>
+                <td class="cllticket">Enfants : <?php print $texte[0]->enfant?></td>
+            </tr>
+            <tr class="rowticket">
+                <td class="cllticket">Heure: <?php print $texte[0]->heure?></td>
+                <td class="cllticket">Etudiants: <?php print $texte[0]->etudiant?></td>
+            </tr>
+            <tr class="rowticket">
+                <td class="cllticket">Film: <?php print utf8_encode($texte[0]->titre)?></td>
+                <td class="cllticket">Prix: <?php print $texte[0]->prix_total?> </td>
+            </tr>
+        </table>
+        </page>
+        <?php
+        $content=ob_get_clean();
+        require_once('./admin/lib/php/html2pdf/html2pdf.class.php');
+        try
+        {
+            $html2pdf = new HTML2PDF('P','A4','fr');
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            $html2pdf->writeHTML($content);
+            ob_end_clean(); 
+            $html2pdf->Output('ticket.pdf');
+        } catch (Exception $ex) {
+            die($ex);
+        }
+        }
 }
 else {
     $info = new VueReservationDB($cnx);
@@ -165,7 +262,8 @@ if ($texte!=0)
 		<div class="col-md-12 bord">
 			<div class="page-header">
 				<h1>
-					Liste de vos réservations
+					Liste de vos réservations<a><form><input rel="tooltip" type="image" src="./admin/images/pdf.jpg" type="submit" name="pdf" id="pdf" value="Mettre à jour"/></form></a>
+                                            
 				</h1>
 			</div>
 			<table class="table">
@@ -179,6 +277,7 @@ if ($texte!=0)
                                                 <th >Adulte</th>
                                                 <th >Etudiant</th>
                                                 <th >Prix</th>
+                                                <th ></th>
                                                 <th ></th>
                                                 <th ></th>
 					</tr>
@@ -201,7 +300,10 @@ if ($texte!=0)
                                                         <a rel="tooltip2" > <form> <input rel="tooltip" type="image" src="./admin/images/modif.jpg" type="submit" name="misaj" id="misaj" value="Mettre à jour"/>
                                                                 <input type="hidden" name="id_res" value="<?php print $texte[$i]->num_res;?>"/> </form></a></td>
                                                        
-                                                      <td><a rel="tooltip" ><form><input type="image" src="./admin/images/supp.jpg" type="submit" name="delete" id="delete" value="Delete"/>
+                                                    <td><a rel="tooltip" ><form><input type="image" src="./admin/images/supp.jpg" type="submit" name="delete" id="delete" value="Delete"/>
+                                                              <input type="hidden" name="id_res" value="<?php print $texte[$i]->num_res;?>"/></form></a></td>
+                                                              
+                                                    <td><a rel="tooltip3"><form><input type="image" src="./admin/images/ticket.jpg" type="submit" name="ticket" id="ticket" value="ticket" />
                                                               <input type="hidden" name="id_res" value="<?php print $texte[$i]->num_res;?>"/></form></a></td>
                                                      
                                                 </tr>
@@ -229,4 +331,5 @@ else
 			</div>
 		</div>
 	</div>
-<?php } } ?>
+<?php } } }
+?>

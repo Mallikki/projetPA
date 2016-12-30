@@ -73,25 +73,26 @@ class VueReservationDB extends VueReservation{
 	return $c."/".$b."/".$a;
         }
         
-        function pdf($array)
+          function read($id)
         {
-            require 'D:/Programme/wamp64/www/Projets/cakephp/app/Vendor/html2pdf/vendor/autoload.php';
-            ob_start();
-            header("Content-type: application/pdf");
-            ?>
-            <h1><?= $array['Post']['name']; ?></h1>
-            <p><?= $array['Post']['content']; ?></p>
-            <?php
-            $content = ob_get_clean();
             try {
-                $pdf = new HTML2PDF('P', 'A4', 'fr');
-                $pdf->pdf->SetDisplayMode('fullpage');
-                $pdf->writeHTML($content);
-                $content = ob_get_clean();
-                $pdf->Output(__DIR__.'/'.$posts['Post']['slug'].'.pdf','FI');
+            $query = "SELECT * FROM reserv where num_res=:id ";
+            $resultset = $this->_db->prepare($query);
+            $resultset->bindValue(1, $id);
+            $resultset->execute();
+         } catch (PDOException $e) {
+            print $e->getMessage();
+        }
 
-            } catch (HTML2PDF_exception $e) {
-                die($e . '' . __LINE__);
+        while ($data = $resultset->fetch()) {
+            try {
+                $_typeArray[] = new Client($data);
+            } catch (PDOException $e) {
+                print $e->getMessage();
             }
         }
+        return $_typeArray;
+        
+        }
+
 }
