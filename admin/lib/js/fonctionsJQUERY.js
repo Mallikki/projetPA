@@ -18,7 +18,7 @@ $('document').ready(function(){
     }).mousemove(function(e) {
  
         // Ajuster la position de l'infobulle au déplacement de la souris
-        $('#tooltip').css('top', e.pageY -500 );
+        $('#tooltip').css('top', e.pageY -225 );
         $('#tooltip').css('left', e.pageX - 300 );
  
     }).mouseout(function() {
