@@ -9,7 +9,7 @@
                                             <a class="ongletPrinc" href="./index.php?page=accueil">Accueil</a>
 					</li>
 					<li class="dropdown">
-						<a class="ongletSec" href="#" class="dropdown-toggle" data-toggle="dropdown">Séance <b class="caret"></b></a>
+						<a href="#" class="ongletSec dropdown-toggle" data-toggle="dropdown">Séance <b class="caret"></b></a>
                                                 <ul class="dropdown-menu">
                                                     <li>
                                                         <a class="ongletSec" href="./index.php?page=programme">Liste des séances </a>

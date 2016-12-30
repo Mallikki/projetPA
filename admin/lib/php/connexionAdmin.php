@@ -28,10 +28,6 @@ if(isset($_POST['submit_login'])){
  else {
     
 ?>
-
-<section id="message"><?php if (isset($message)) //print $message; ?></section>
-<section id="message">
-    <?php if (isset($message)) print $message; ?></section>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12"><br><br><br><br></div>
